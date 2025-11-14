@@ -34,10 +34,11 @@ export const orderStatusEnum = pgEnum('order_status', ['preparing', 'on_delivery
 // Payment method enum
 export const paymentMethodEnum = pgEnum('payment_method', ['cash', 'bank_transfer']);
 
-// Users table (required for Replit Auth)
+// Users table
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  email: varchar("email").unique(),
+  email: varchar("email").unique().notNull(),
+  password: varchar("password", { length: 255 }).notNull(),
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
   phone: varchar("phone", { length: 20 }),
