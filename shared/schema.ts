@@ -39,9 +39,9 @@ export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: varchar("email").unique().notNull(),
   password: varchar("password", { length: 255 }).notNull(),
-  firstName: varchar("first_name"),
-  lastName: varchar("last_name"),
-  phone: varchar("phone", { length: 20 }),
+  firstName: varchar("first_name").notNull(),
+  lastName: varchar("last_name").notNull(),
+  phone: varchar("phone", { length: 20 }).notNull(),
   profileImageUrl: varchar("profile_image_url"),
   role: userRoleEnum("role").default('customer').notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -263,6 +263,10 @@ export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  email: z.string().email("Geçerli bir e-posta adresi giriniz"),
+  password: z.string().min(6, "Şifre en az 6 karakter olmalıdır"),
+  phone: z.string().regex(/^[0-9]{10}$/, "Telefon numarası 10 haneli olmalıdır (5xxxxxxxxx)"),
 });
 
 export const upsertUserSchema = createInsertSchema(users).omit({
@@ -274,7 +278,7 @@ export const upsertUserSchema = createInsertSchema(users).omit({
 export const updateUserSchema = z.object({
   firstName: z.string().min(1, "Ad gerekli").optional(),
   lastName: z.string().min(1, "Soyad gerekli").optional(),
-  phone: z.string().max(20).optional().nullable(),
+  phone: z.string().regex(/^[0-9]{10}$/, "Telefon numarası 10 haneli olmalıdır (5xxxxxxxxx)").optional(),
 });
 
 export const insertCategorySchema = createInsertSchema(categories).omit({

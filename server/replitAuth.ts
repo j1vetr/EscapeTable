@@ -34,8 +34,9 @@ function getSession() {
 const registerSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
-  firstName: z.string().min(1).optional(),
-  lastName: z.string().min(1).optional(),
+  phone: z.string().regex(/^[0-9]{10}$/, "Telefon numarası 10 haneli olmalıdır"),
+  firstName: z.string().min(1, "Ad gereklidir"),
+  lastName: z.string().min(1, "Soyad gereklidir"),
 });
 
 const loginSchema = z.object({
@@ -105,6 +106,7 @@ export async function setupAuth(app: Express) {
       const newUser = await storage.createUser({
         email: validatedData.email,
         password: hashedPassword,
+        phone: validatedData.phone,
         firstName: validatedData.firstName,
         lastName: validatedData.lastName,
         role: "customer",
@@ -118,6 +120,7 @@ export async function setupAuth(app: Express) {
           user: { 
             id: newUser.id, 
             email: newUser.email, 
+            phone: newUser.phone,
             firstName: newUser.firstName,
             lastName: newUser.lastName,
             role: newUser.role 
@@ -180,6 +183,7 @@ export async function setupAuth(app: Express) {
       res.json({
         id: dbUser.id,
         email: dbUser.email,
+        phone: dbUser.phone,
         firstName: dbUser.firstName,
         lastName: dbUser.lastName,
         role: dbUser.role,
