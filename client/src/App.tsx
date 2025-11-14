@@ -19,6 +19,7 @@ import Cart from "@/pages/cart";
 import Checkout from "@/pages/checkout";
 import Orders from "@/pages/orders";
 import Account from "@/pages/account";
+import Login from "@/pages/login";
 
 // Admin Pages
 import AdminDashboard from "@/pages/admin/dashboard";
@@ -38,6 +39,7 @@ function CustomerRouter() {
       <Header />
       <Switch>
         <Route path="/" component={Home} />
+        <Route path="/login" component={Login} />
         <Route path="/categories" component={Categories} />
         <Route path="/categories/:id" component={CategoryDetail} />
         <Route path="/products/:id" component={ProductDetail} />

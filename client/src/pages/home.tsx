@@ -4,12 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatPrice } from "@/lib/authUtils";
-import { ShoppingCart, ChevronRight } from "lucide-react";
-import { useLocation } from "wouter";
+import { ShoppingCart, ChevronRight, LogIn, Sparkles } from "lucide-react";
+import { useLocation, Link } from "wouter";
+import { useAuth } from "@/hooks/useAuth";
 import type { Category, Product } from "@shared/schema";
 
 export default function Home() {
   const [, setLocation] = useLocation();
+  const { isAuthenticated } = useAuth();
 
   const { data: categories, isLoading: categoriesLoading } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
@@ -24,8 +26,53 @@ export default function Home() {
 
   return (
     <div className="pb-20">
+      {/* Welcome Hero for Unauthenticated Users */}
+      {!isAuthenticated && (
+        <section className="bg-gradient-to-br from-primary via-primary to-primary/90 text-primary-foreground">
+          <div className="px-4 py-12">
+            <div className="max-w-2xl mx-auto text-center space-y-4">
+              <div className="inline-flex items-center gap-2 bg-primary-foreground/10 px-4 py-2 rounded-full text-sm font-medium">
+                <Sparkles className="w-4 h-4" />
+                <span>Premium Kamp Deneyimi</span>
+              </div>
+              <h1 className="text-3xl md:text-4xl font-bold font-heading">
+                Kamp Keyfinizi Eksiksiz Yaşayın
+              </h1>
+              <p className="text-lg text-primary-foreground/90">
+                Unuttuğunuz ya da ihtiyacınız olan premium ürünleri kampınıza hızlıca teslim ediyoruz.
+                Fethiye, Datça ve Kaş bölgelerinde hizmetinizdeyiz.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
+                <Button
+                  size="lg"
+                  asChild
+                  className="bg-card hover:bg-card text-primary border-2 border-primary-foreground/20 shadow-lg"
+                  data-testid="button-hero-login"
+                >
+                  <Link to="/login">
+                    <LogIn className="w-5 h-5 mr-2" />
+                    Giriş Yap ve Alışverişe Başla
+                  </Link>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => {
+                    document.querySelector('.categories-section')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="bg-primary-foreground/10 hover:bg-primary-foreground/20 border-primary-foreground/20 text-primary-foreground"
+                  data-testid="button-browse-products"
+                >
+                  Ürünleri İncele
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Categories Carousel */}
-      <section className="py-6 bg-card">
+      <section className="py-6 bg-card categories-section">
         <div className="px-4">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold font-heading">Kategoriler</h2>

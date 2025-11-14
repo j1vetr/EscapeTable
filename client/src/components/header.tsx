@@ -1,5 +1,5 @@
 import { MapPin, User, Search, ChevronDown, LogIn } from "lucide-react";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect, useRef } from "react";
@@ -156,10 +156,10 @@ export function Header() {
                 className="hidden md:flex items-center gap-2 bg-card hover:bg-card text-primary border-primary-foreground/20"
                 data-testid="link-login-desktop"
               >
-                <a href="/api/auth/login">
+                <Link to="/login">
                   <LogIn className="w-4 h-4" />
                   <span className="font-medium">Giriş Yap</span>
-                </a>
+                </Link>
               </Button>
             )}
 
@@ -183,9 +183,9 @@ export function Header() {
                   className="bg-card hover:bg-card text-primary border-primary-foreground/20"
                   data-testid="link-login-mobile"
                 >
-                  <a href="/api/auth/login">
+                  <Link to="/login">
                     <LogIn className="w-4 h-4" />
-                  </a>
+                  </Link>
                 </Button>
               )}
             </div>
