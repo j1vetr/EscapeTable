@@ -174,9 +174,14 @@ export function Header() {
                   variant="ghost"
                   size="sm"
                   onClick={() => setLocation("/account")}
-                  className="text-primary-foreground hover:bg-primary-foreground/10"
+                  className="text-primary-foreground hover:bg-primary-foreground/10 flex items-center gap-2"
                   data-testid="button-account-mobile"
                 >
+                  <span className="font-medium text-sm">
+                    {user?.firstName 
+                      ? `Merhaba ${user.firstName}` 
+                      : 'Merhaba'}
+                  </span>
                   <User className="w-4 h-4" />
                 </Button>
               ) : (
