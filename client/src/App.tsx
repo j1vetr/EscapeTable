@@ -71,6 +71,26 @@ function AdminRouter() {
   );
 }
 
+function LoginPrompt() {
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-card rounded-lg p-8 text-center space-y-4">
+        <h2 className="text-2xl font-bold text-foreground">Giriş Yapın</h2>
+        <p className="text-muted-foreground">
+          Bu sayfaya erişmek için giriş yapmanız gerekiyor.
+        </p>
+        <a
+          href="/api/auth/login"
+          className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-md font-medium hover-elevate active-elevate-2"
+          data-testid="button-login"
+        >
+          Giriş Yap
+        </a>
+      </div>
+    </div>
+  );
+}
+
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
   const [location] = useLocation();
@@ -90,7 +110,7 @@ function Router() {
   // Admin routes require authentication
   if (location.startsWith("/admin")) {
     if (!isAuthenticated) {
-      return <Landing />;
+      return <LoginPrompt />;
     }
     return <AdminRouter />;
   }
@@ -98,7 +118,7 @@ function Router() {
   // Protected customer routes require authentication
   const protectedRoutes = ["/checkout", "/orders", "/account"];
   if (protectedRoutes.some(route => location.startsWith(route)) && !isAuthenticated) {
-    return <Landing />;
+    return <LoginPrompt />;
   }
 
   // All other routes are accessible without authentication

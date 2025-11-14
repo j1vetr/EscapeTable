@@ -16,7 +16,7 @@ export default function Home() {
   });
 
   const { data: featuredProducts, isLoading: productsLoading } = useQuery<Product[]>({
-    queryKey: ["/api/products/featured"],
+    queryKey: ["/api/products/featured/list"],
   });
 
   const activeCategories = categories?.filter((c) => c.isActive) || [];
