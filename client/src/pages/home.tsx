@@ -53,16 +53,26 @@ export default function Home() {
               {activeCategories.map((category) => (
                 <Card
                   key={category.id}
-                  className="min-w-[100px] p-4 text-center cursor-pointer hover-elevate active-elevate-2"
+                  className="min-w-[140px] max-w-[140px] overflow-hidden cursor-pointer hover-elevate active-elevate-2"
                   onClick={() => setLocation(`/categories/${category.id}`)}
                   data-testid={`category-card-${category.id}`}
                 >
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <ShoppingCart className="w-6 h-6 text-primary" />
+                  <div className="aspect-square bg-muted flex items-center justify-center">
+                    {category.imageUrl ? (
+                      <img
+                        src={category.imageUrl}
+                        alt={category.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <ShoppingCart className="w-12 h-12 text-muted-foreground" />
+                    )}
                   </div>
-                  <p className="text-sm font-medium line-clamp-2">
-                    {category.name}
-                  </p>
+                  <div className="p-3">
+                    <p className="text-sm font-medium text-center line-clamp-2">
+                      {category.name}
+                    </p>
+                  </div>
                 </Card>
               ))}
             </div>
