@@ -327,16 +327,34 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Order operations
-  async getOrders(filters?: { userId?: string }): Promise<Order[]> {
+  async getOrders(filters?: { userId?: string }): Promise<any[]> {
     if (filters?.userId) {
-      return db.select().from(orders).where(eq(orders.userId, filters.userId)).orderBy(desc(orders.createdAt));
+      return db.query.orders.findMany({
+        where: eq(orders.userId, filters.userId),
+        orderBy: [desc(orders.createdAt)],
+        with: {
+          campingLocation: true,
+          items: true,
+        },
+      });
     }
-    return db.select().from(orders).orderBy(desc(orders.createdAt));
+    return db.query.orders.findMany({
+      orderBy: [desc(orders.createdAt)],
+      with: {
+        campingLocation: true,
+        items: true,
+      },
+    });
   }
 
-  async getOrder(id: string): Promise<Order | undefined> {
-    const [order] = await db.select().from(orders).where(eq(orders.id, id));
-    return order;
+  async getOrder(id: string): Promise<any | undefined> {
+    return db.query.orders.findFirst({
+      where: eq(orders.id, id),
+      with: {
+        campingLocation: true,
+        items: true,
+      },
+    });
   }
 
   async createOrder(order: InsertOrder): Promise<Order> {

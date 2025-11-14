@@ -2,14 +2,30 @@ import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
 import { formatPrice, getOrderStatusLabel, getOrderStatusColor } from "@/lib/authUtils";
-import { Package, Calendar } from "lucide-react";
+import { Package, Calendar, MapPin, CreditCard, ShoppingBag } from "lucide-react";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import type { Order } from "@shared/schema";
 
+interface OrderWithDetails extends Order {
+  campingLocation?: {
+    id: string;
+    name: string;
+    address?: string | null;
+  } | null;
+  items?: Array<{
+    id: string;
+    productName: string;
+    quantity: number;
+    productPriceInCents: number;
+    subtotalInCents: number;
+  }>;
+}
+
 export default function Orders() {
-  const { data: orders, isLoading } = useQuery<Order[]>({
+  const { data: orders, isLoading } = useQuery<OrderWithDetails[]>({
     queryKey: ["/api/orders"],
   });
 
@@ -32,12 +48,12 @@ export default function Orders() {
         ) : orders && orders.length > 0 ? (
           <div className="space-y-4">
             {orders.map((order) => (
-              <Card key={order.id} className="p-4 hover-elevate" data-testid={`order-card-${order.id}`}>
-                <div className="flex items-start justify-between mb-3">
+              <Card key={order.id} className="p-5 hover-elevate" data-testid={`order-card-${order.id}`}>
+                <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <Package className="w-5 h-5 text-primary" />
                     <div>
-                      <p className="font-semibold text-sm">Sipariş #{order.id.slice(0, 8)}</p>
+                      <p className="font-semibold">Sipariş #{order.id.slice(0, 8)}</p>
                       <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
                         <Calendar className="w-3 h-3" />
                         {format(new Date(order.createdAt), "d MMMM yyyy, HH:mm", { locale: tr })}
@@ -49,27 +65,82 @@ export default function Orders() {
                   </Badge>
                 </div>
 
+                {/* Camping Location */}
+                {order.campingLocation && (
+                  <div className="flex items-start gap-2 mb-3">
+                    <MapPin className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                    <div className="text-sm">
+                      <p className="font-medium">{order.campingLocation.name}</p>
+                      {order.campingLocation.address && (
+                        <p className="text-xs text-muted-foreground mt-0.5">{order.campingLocation.address}</p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Custom Address Note */}
+                {order.customAddress && (
+                  <div className="flex items-start gap-2 mb-3 bg-muted/30 p-2 rounded-md">
+                    <Package className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                    <div className="text-sm">
+                      <p className="text-xs font-medium text-muted-foreground mb-0.5">Teslimat Notu</p>
+                      <p className="text-xs">{order.customAddress}</p>
+                    </div>
+                  </div>
+                )}
+
+                <Separator className="my-3" />
+
+                {/* Order Items */}
+                {order.items && order.items.length > 0 && (
+                  <div className="mb-3">
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <ShoppingBag className="w-4 h-4 text-primary" />
+                      <p className="text-xs font-semibold text-muted-foreground">Ürünler</p>
+                    </div>
+                    <div className="space-y-1.5">
+                      {order.items.map((item) => (
+                        <div key={item.id} className="flex justify-between items-center text-sm">
+                          <div className="flex items-center gap-2">
+                            <Badge variant="secondary" className="text-xs px-1.5 py-0.5">
+                              {item.quantity}x
+                            </Badge>
+                            <span className="text-sm">{item.productName}</span>
+                          </div>
+                          <span className="font-medium text-sm">{formatPrice(item.subtotalInCents)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <Separator className="my-3" />
+
+                {/* Summary */}
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Toplam Tutar</span>
-                    <span className="font-semibold text-primary" data-testid={`text-total-${order.id}`}>
+                  {order.estimatedDeliveryTime && (
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground text-xs">Tahmini Teslimat</span>
+                      <span className="font-medium text-xs">{order.estimatedDeliveryTime}</span>
+                    </div>
+                  )}
+                  
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-1.5">
+                      <CreditCard className="w-3.5 h-3.5 text-muted-foreground" />
+                      <span className="text-muted-foreground text-xs">Ödeme Yöntemi</span>
+                    </div>
+                    <span className="font-medium text-xs">
+                      {order.paymentMethod === "cash" ? "Nakit" : "Havale/EFT"}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center pt-2 border-t">
+                    <span className="font-semibold">Toplam Tutar</span>
+                    <span className="text-lg font-bold text-primary" data-testid={`text-total-${order.id}`}>
                       {formatPrice(order.totalAmountInCents)}
                     </span>
                   </div>
-                  
-                  {order.estimatedDeliveryTime && (
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Tahmini Teslimat</span>
-                      <span className="font-medium">{order.estimatedDeliveryTime}</span>
-                    </div>
-                  )}
-
-                  {order.customAddress && (
-                    <div className="pt-2 border-t">
-                      <p className="text-xs text-muted-foreground mb-1">Teslimat Adresi</p>
-                      <p className="text-xs">{order.customAddress}</p>
-                    </div>
-                  )}
                 </div>
               </Card>
             ))}
