@@ -1,0 +1,31 @@
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+root@162-55-4-35:/var/www/escapetable# sudo systemctl restart nginx
+root@162-55-4-35:/var/www/escapetable# sudo systemctl status nginx
+● nginx.service - A high performance web server and a reverse proxy server
+     Loaded: loaded (/lib/systemd/system/nginx.service; enabled; vendor preset: enabled)
+     Active: active (running) since Fri 2025-11-14 11:42:06 +03; 3s ago
+       Docs: man:nginx(8)
+    Process: 3223855 ExecStartPre=/usr/sbin/nginx -t -q -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+    Process: 3223856 ExecStart=/usr/sbin/nginx -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+   Main PID: 3223857 (nginx)
+      Tasks: 5 (limit: 9388)
+     Memory: 7.9M
+        CPU: 82ms
+     CGroup: /system.slice/nginx.service
+             ├─3223857 "nginx: master process /usr/sbin/nginx -g daemon on; master_process on;"
+             ├─3223858 "nginx: worker process" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+             ├─3223859 "nginx: worker process" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+             ├─3223860 "nginx: worker process" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+             └─3223861 "nginx: worker process" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+
+Nov 14 11:42:06 162-55-4-35.datahost.net.tr systemd[1]: Starting A high performance web server and a reverse proxy server...
+Nov 14 11:42:06 162-55-4-35.datahost.net.tr systemd[1]: Started A high performance web server and a reverse proxy server.
+root@162-55-4-35:/var/www/escapetable# curl https://escape.toov.com.tr/attached_assets/generated_images/Food_category_icon_ce060ebe.webp -I
+HTTP/2 404
+server: nginx/1.18.0 (Ubuntu)
+date: Fri, 14 Nov 2025 08:42:15 GMT
+content-type: text/html
+content-length: 162
+
+root@162-55-4-35:/var/www/escapetable#
