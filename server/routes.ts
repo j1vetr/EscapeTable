@@ -452,6 +452,11 @@ export function registerRoutes(app: Express) {
   app.post("/api/orders", isAuthenticated, async (req, res) => {
     try {
       const user = req.user as any;
+      
+      if (!user || !user.claims || !user.claims.sub) {
+        return res.status(401).json({ message: "Unauthorized: Invalid user session" });
+      }
+      
       const dbUser = await storage.getUser(user.claims.sub);
       
       if (!dbUser) {
