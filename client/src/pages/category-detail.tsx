@@ -101,21 +101,21 @@ export default function CategoryDetail() {
                     <ShoppingCart className="w-12 h-12 text-muted-foreground" />
                   )}
                 </div>
-                <div className="p-3 space-y-2">
-                  <h3 className="font-medium line-clamp-2 text-sm">
+                <div className="p-3 space-y-2 bg-primary">
+                  <h3 className="font-semibold line-clamp-2 text-sm text-primary-foreground">
                     {product.name}
                   </h3>
                   {product.description && (
-                    <p className="text-xs text-muted-foreground line-clamp-2">
+                    <p className="text-xs text-primary-foreground/80 line-clamp-2">
                       {product.description}
                     </p>
                   )}
                   <div className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-primary">
+                    <span className="text-lg font-bold text-card">
                       {formatPrice(product.priceInCents)}
                     </span>
                     {product.stock > 0 ? (
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-xs bg-card text-primary border-0">
                         Stokta
                       </Badge>
                     ) : (
@@ -126,7 +126,7 @@ export default function CategoryDetail() {
                   </div>
                   <Button
                     size="sm"
-                    className="w-full"
+                    className="w-full bg-card hover:bg-card text-primary border-0"
                     disabled={product.stock === 0}
                     onClick={(e) => {
                       e.stopPropagation();

@@ -39,8 +39,7 @@ export default function Home() {
                 Kamp Keyfinizi Eksiksiz Yaşayın
               </h1>
               <p className="text-lg text-primary-foreground/90">
-                Unuttuğunuz ya da ihtiyacınız olan premium ürünleri kampınıza hızlıca teslim ediyoruz.
-                Fethiye, Datça ve Kaş bölgelerinde hizmetinizdeyiz.
+                Karavan parklarında unuttuğunuz ya da ihtiyacınız olan premium ürünleri size hızlıca ulaştırıyoruz.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
                 <Button
@@ -113,8 +112,8 @@ export default function Home() {
                       <ShoppingCart className="w-12 h-12 text-muted-foreground" />
                     )}
                   </div>
-                  <div className="p-3">
-                    <p className="text-sm font-medium text-center line-clamp-2">
+                  <div className="p-3 bg-primary">
+                    <p className="text-sm font-semibold text-center line-clamp-2 text-primary-foreground">
                       {category.name}
                     </p>
                   </div>
@@ -156,16 +155,16 @@ export default function Home() {
                       <ShoppingCart className="w-12 h-12 text-muted-foreground" />
                     )}
                   </div>
-                  <div className="p-3 space-y-2">
-                    <h3 className="font-medium line-clamp-2 text-sm">
+                  <div className="p-3 space-y-2 bg-primary">
+                    <h3 className="font-semibold line-clamp-2 text-sm text-primary-foreground">
                       {product.name}
                     </h3>
                     <div className="flex items-center justify-between">
-                      <span className="text-lg font-bold text-primary">
+                      <span className="text-lg font-bold text-card">
                         {formatPrice(product.priceInCents)}
                       </span>
                       {product.stock > 0 ? (
-                        <Badge variant="secondary" className="text-xs">
+                        <Badge variant="secondary" className="text-xs bg-card text-primary border-0">
                           Stokta
                         </Badge>
                       ) : (
@@ -176,7 +175,7 @@ export default function Home() {
                     </div>
                     <Button
                       size="sm"
-                      className="w-full"
+                      className="w-full bg-card hover:bg-card text-primary border-0"
                       disabled={product.stock === 0}
                       data-testid={`button-add-to-cart-${product.id}`}
                     >

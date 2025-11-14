@@ -50,8 +50,8 @@ export default function Categories() {
                     <ShoppingCart className="w-12 h-12 text-muted-foreground" />
                   )}
                 </div>
-                <div className="p-3">
-                  <p className="text-sm font-medium text-center line-clamp-2">
+                <div className="p-3 bg-primary">
+                  <p className="text-sm font-semibold text-center line-clamp-2 text-primary-foreground">
                     {category.name}
                   </p>
                 </div>
