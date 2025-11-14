@@ -145,12 +145,12 @@ export function Header() {
                 className="hidden md:flex items-center gap-2 text-primary-foreground hover:bg-primary-foreground/10"
                 data-testid="button-profile-top"
               >
-                <User className="w-4 h-4" />
                 <span className="font-medium">
-                  {user?.firstName && user?.lastName 
-                    ? `${user.firstName} ${user.lastName}` 
-                    : user?.firstName || 'Hesabım'}
+                  {user?.firstName 
+                    ? `Merhaba ${user.firstName}` 
+                    : 'Merhaba'}
                 </span>
+                <User className="w-4 h-4" />
               </Button>
             ) : (
               <Button
