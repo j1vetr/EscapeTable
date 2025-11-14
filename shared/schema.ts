@@ -117,10 +117,10 @@ export const orders = pgTable("orders", {
   paymentMethod: paymentMethodEnum("payment_method").notNull(),
   
   // Delivery information
-  regionId: varchar("region_id").notNull().references(() => deliveryRegions.id),
+  regionId: varchar("region_id").references(() => deliveryRegions.id), // Nullable - Istanbul fixed
   campingLocationId: varchar("camping_location_id").references(() => campingLocations.id),
-  customAddress: text("custom_address"),
-  deliverySlotId: varchar("delivery_slot_id").references(() => deliverySlots.id),
+  customAddress: text("custom_address"), // Now used as delivery note
+  deliverySlotId: varchar("delivery_slot_id").references(() => deliverySlots.id), // Nullable - dynamic time slots
   estimatedDeliveryTime: varchar("estimated_delivery_time", { length: 100 }),
   
   createdAt: timestamp("created_at").defaultNow().notNull(),
