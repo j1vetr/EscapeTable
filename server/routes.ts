@@ -452,11 +452,6 @@ export function registerRoutes(app: Express) {
   app.post("/api/orders", isAuthenticated, async (req, res) => {
     try {
       const user = req.user as any;
-      
-      if (!user || !user.claims || !user.claims.sub) {
-        return res.status(401).json({ message: "Unauthorized: Invalid user session" });
-      }
-      
       const dbUser = await storage.getUser(user.claims.sub);
       
       if (!dbUser) {
@@ -483,6 +478,7 @@ export function registerRoutes(app: Express) {
       
       res.status(201).json(order);
     } catch (error: any) {
+      console.error("Order creation error:", error);
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: fromZodError(error).message });
       }
