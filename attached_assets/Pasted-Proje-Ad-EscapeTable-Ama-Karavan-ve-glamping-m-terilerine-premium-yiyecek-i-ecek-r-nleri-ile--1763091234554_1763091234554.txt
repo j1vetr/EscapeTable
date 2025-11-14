@@ -1,0 +1,102 @@
+Proje Adı: EscapeTable
+Amaç: Karavan ve glamping müşterilerine premium yiyecek-içecek ürünleri ile kamp ihtiyaçlarını hızlı teslimatla ulaştırmak. Kullanıcılar kamp alanlarında unuttukları veya anlık ihtiyaç duydukları ürünleri kolayca seçip sipariş verir.
+
+Veritabanı: **Yalnızca PostgreSQL** kullanılacaktır.  
+Başka hiçbir veritabanı veya KV çözümü kullanılmayacak.
+
+# Renk Paleti
+- Ana renk (arka plan + kurumsal vurgu): **Koyu Yeşil #192718**
+- Kontrast / Bölüm arka planları / kart yüzeyleri: **Krem #f5e7da**
+- Yazı: Siyah veya koyu tonlu gri (yüksek okunabilirlik için)
+- UI estetiği: Doğal, premium, kamp-lüks hissi, sade ama güçlü kontrastlar
+
+# Kullanıcı Deneyimi (Trendyol Mobil Tarzı)
+- Açılış ekranı: Trendyol mobil gibi modern, büyük görseller, kategori şeritleri ve sabit alt menü.
+- Ana Ekran:
+  - Üstte EscapeTable logosu ve bölge seçici.
+  - Geniş hero banner: “Kamp Keyfiniz Yarım Kalmasın.”
+  - Trendyol’daki gibi yatay kategori kaydırma şeridi (büyük ikon + isim).
+  - “Öne Çıkanlar” karuseli: büyük ürün kartları (krem arka plan, koyu yeşil çerçeve/başlık uyumu).
+  - Ürünler büyük, temiz, bir bakışta anlaşılır; “Sepete Ekle” butonu net şekilde görünür.
+- Sabit alt menü (5 sekme):
+  - Ana Sayfa
+  - Kategoriler
+  - Sepet
+  - Siparişlerim
+  - Hesabım
+- Sepet: ekran altına yapışık mini özet + ileri süreç butonu.
+- Teslimat Akışı:
+  - Bölge seç (Fethiye/Datça/Kaş gibi).
+  - Kamp alanı seç veya serbest adres yaz.
+  - Teslimat zaman aralığı (slot) seç.
+  - Ödeme yöntemi (Nakit / Havale).
+- Sipariş Durumları:
+  - “Hazırlanıyor”, “Yolda”, “Teslim Edildi”, “İptal Edildi”.
+
+# PostgreSQL Kavramsal Model
+EscapeTable tüm veriyi PostgreSQL’de tutar. Temel varlıklar:
+
+- **Kullanıcı**  
+  (roller: Müşteri, Admin, Personel; email tekil; şifre hash; zaman damgaları)
+
+- **Kategori**  
+  (isim, açıklama, sıralama, aktif/pasif)
+
+- **Ürün**  
+  (ad, açıklama, fiyat kuruş bazlı, görsel URL, kategori bağlantısı, stok, aktif/pasif)
+
+- **Teslimat Bölgesi**  
+  (ör. Fethiye, Datça, Kaş; min/max ETA; aktif/pasif)
+
+- **Kamp Lokasyonu**  
+  (bölge referansı, ad, açıklama veya adres metni)
+
+- **Teslimat Zaman Dilimi (Slot)**  
+  (bölgeye bağlı, başlangıç-bitiş aralığı)
+
+- **Sipariş**  
+  (kullanıcı, durum, toplam tutar, ödeme yöntemi, adres/kamp alanı bilgisi, ETA bilgisi)
+
+- **Sipariş Kalemi**  
+  (ürün referansı, adet, sipariş anındaki anlık fiyat-ad bilgisi)
+
+- **Stok Hareketi**  
+  (ürüne bağlı artı/eksi hareket, sebep)
+
+- **Ayarlar**  
+  (JSON key/value – aktif bölgeler, banner metinleri, min-max ETA vb.)
+
+- **Admin Günlüğü / Audit**  
+  (kim neyi değiştirmiş; JSON yük ile saklanır)
+
+Kurallar:
+- Tüm ilişkiler PostgreSQL foreign key ile bağlı.
+- E-posta ve tüm slug alanları tekil.
+- Stok, sipariş oluşturulurken kontrol edilir.
+- "Yolda" (ON_DELIVERY) durumuna geçen sipariş iptal edilemez.
+
+# Admin Panel (EscapeTable Yönetimi)
+EscapeTable’ın tüm içeriği Admin Panel'den yönetilebilir:
+
+- Dashboard: günlük/haftalık sipariş sayısı, gelir, en çok satan ürünler.
+- Kategori Yönetimi: ekle/düzenle/sil, sırala, aktif/pasif.
+- Ürün Yönetimi: ekle/düzenle/sil, fiyat, stok, görsel, kategori.
+- Sipariş Yönetimi: listeleme, durum değiştirme (Hazırlanıyor → Yolda → Teslim).
+- Bölge / Slot / Kamp Lokasyonu Yönetimi: tam CRUD.
+- Ayarlar: banner metinleri, aktif bölgeler, ETA aralığı gibi değerler JSON biçiminde düzenlenebilir.
+- Kullanıcı / Rol Yönetimi.
+
+# Müşteri Tarafındaki Akış
+- Ürünler büyük kartlarla gösterilir; krem arka plan + koyu yeşil vurgulu bir premium estetik.
+- Kullanıcılar iki tıkla sepete, üç tıkla sipariş onayına ulaşabilir.
+- Sipariş özeti temiz, geniş, kolay okunur.
+- Siparişlerim ekranında Trendyol tarzı statü rozetleri.
+
+# Sonuç Beklentisi
+- Sadece PostgreSQL kullanan,
+- Mobil ağırlıklı, Trendyol hissinde,
+- Modern, şık, sade ama premium bir arayüz sunan,
+- Admin Panelden eksiksiz yönetilebilen,
+- EscapeTable markasına uygun (koyu yeşil #192718 + krem #f5e7da paleti),
+- Karavan müşterilerinin çok hızlı sipariş verebileceği bir sistem.
+
