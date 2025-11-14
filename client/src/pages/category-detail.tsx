@@ -86,47 +86,47 @@ export default function CategoryDetail() {
             {activeProducts.map((product) => (
               <Card
                 key={product.id}
-                className="overflow-hidden hover-elevate cursor-pointer"
+                className="group overflow-hidden hover-elevate cursor-pointer border-0 shadow-lg"
                 onClick={() => setLocation(`/products/${product.id}`)}
                 data-testid={`product-card-${product.id}`}
               >
-                <div className="aspect-square bg-muted flex items-center justify-center">
+                <div className="aspect-square bg-muted flex items-center justify-center overflow-hidden relative">
                   {product.imageUrl ? (
                     <img
                       src={product.imageUrl}
                       alt={product.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   ) : (
                     <ShoppingCart className="w-12 h-12 text-muted-foreground" />
                   )}
+                  {product.stock > 0 ? (
+                    <Badge className="absolute top-2 right-2 bg-primary text-primary-foreground border-0">
+                      Stokta
+                    </Badge>
+                  ) : (
+                    <Badge variant="destructive" className="absolute top-2 right-2">
+                      Tükendi
+                    </Badge>
+                  )}
                 </div>
-                <div className="p-3 space-y-2 bg-primary">
-                  <h3 className="font-semibold line-clamp-2 text-sm text-primary-foreground">
+                <div className="p-4 space-y-3 bg-white dark:bg-card">
+                  <h3 className="font-bold line-clamp-2 text-base min-h-[2.5rem]">
                     {product.name}
                   </h3>
                   {product.description && (
-                    <p className="text-xs text-primary-foreground/80 line-clamp-2">
+                    <p className="text-xs text-muted-foreground line-clamp-2 min-h-[2rem]">
                       {product.description}
                     </p>
                   )}
                   <div className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-card">
+                    <span className="text-2xl font-extrabold text-primary">
                       {formatPrice(product.priceInCents)}
                     </span>
-                    {product.stock > 0 ? (
-                      <Badge variant="secondary" className="text-xs bg-card text-primary border-0">
-                        Stokta
-                      </Badge>
-                    ) : (
-                      <Badge variant="destructive" className="text-xs">
-                        Tükendi
-                      </Badge>
-                    )}
                   </div>
                   <Button
                     size="sm"
-                    className="w-full bg-card hover:bg-card text-primary border-0"
+                    className="w-full bg-primary hover:bg-primary text-primary-foreground font-bold"
                     disabled={product.stock === 0}
                     onClick={(e) => {
                       e.stopPropagation();
