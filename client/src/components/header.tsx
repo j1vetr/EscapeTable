@@ -14,7 +14,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useTypingPlaceholder } from "@/hooks/useTypingPlaceholder";
 import { formatPrice } from "@/lib/authUtils";
-import logoUrl from "@assets/Escape-Table-Logo---Koyu_1763093921312.png";
+import logoUrl from "@assets/Escape-Table-Logo---Koyu_1763093921312.webp";
 
 export function Header() {
   const [, setLocation] = useLocation();
