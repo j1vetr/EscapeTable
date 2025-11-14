@@ -1,11 +1,11 @@
 import { useAuth } from "@/hooks/useAuth";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
-import { User, LogOut, Shield, Edit, X, Save } from "lucide-react";
+import { User, LogOut, Shield, Edit, X, Save, Mail, Phone } from "lucide-react";
 import { useLocation } from "wouter";
 import { useState, useEffect } from "react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
@@ -143,13 +143,20 @@ export default function Account() {
 
   if (isLoading) {
     return (
-      <div className="pb-20">
-        <div className="bg-primary text-primary-foreground px-4 py-6">
-          <h1 className="text-2xl font-bold font-heading">Hesabım</h1>
+      <div className="pb-20 min-h-screen bg-gradient-to-b from-background to-muted/30">
+        <div className="relative overflow-hidden bg-gradient-to-r from-primary via-primary/95 to-primary/80 text-primary-foreground px-4 py-8">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary-foreground/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-primary-foreground/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+          <div className="relative">
+            <h1 className="text-3xl font-bold font-heading">Hesabım</h1>
+            <p className="text-primary-foreground/80 mt-2">Profil bilgilerinizi yönetin</p>
+          </div>
         </div>
-        <div className="px-4 py-6 space-y-4">
-          <Card className="p-6">
-            <Skeleton className="h-20 w-full" />
+        <div className="px-4 py-6 space-y-4 max-w-3xl mx-auto">
+          <Card className="border-2">
+            <CardContent className="p-6">
+              <Skeleton className="h-32 w-full" />
+            </CardContent>
           </Card>
         </div>
       </div>
@@ -157,166 +164,226 @@ export default function Account() {
   }
 
   return (
-    <div className="pb-20">
-      <div className="bg-primary text-primary-foreground px-4 py-6">
-        <h1 className="text-2xl font-bold font-heading">Hesabım</h1>
+    <div className="pb-20 min-h-screen bg-gradient-to-b from-background to-muted/30">
+      {/* Premium Header with Gradient */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-primary via-primary/95 to-primary/80 text-primary-foreground px-4 py-8">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary-foreground/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-primary-foreground/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+        <div className="relative max-w-3xl mx-auto">
+          <h1 className="text-3xl font-bold font-heading">Hesabım</h1>
+          <p className="text-primary-foreground/80 mt-2">Profil bilgilerinizi yönetin</p>
+        </div>
       </div>
 
-      <div className="px-4 py-6 space-y-4">
-        {/* Profile Card */}
-        <Card className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-4">
-              <Avatar className="w-16 h-16">
-                <AvatarImage src={user?.profileImageUrl || undefined} />
-                <AvatarFallback className="bg-primary text-primary-foreground">
-                  <User className="w-8 h-8" />
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1">
-                <h2 className="text-xl font-semibold" data-testid="text-user-name">
-                  {user?.firstName && user?.lastName
-                    ? `${user.firstName} ${user.lastName}`
-                    : "Kullanıcı"}
-                </h2>
-                <p className="text-sm text-muted-foreground" data-testid="text-user-email">
-                  {user?.email || "email@example.com"}
-                </p>
-                <Badge variant={getRoleBadgeVariant()} className="mt-2" data-testid="badge-user-role">
-                  {getRoleLabel()}
-                </Badge>
-              </div>
-            </div>
-            {!isEditing && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setIsEditing(true)}
-                disabled={updateProfileMutation.isPending}
-                data-testid="button-edit-profile"
-              >
-                <Edit className="w-4 h-4 mr-2" />
-                Düzenle
-              </Button>
-            )}
-          </div>
-
-          {/* Edit Form */}
-          {isEditing && (
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4 border-t">
-                <FormField
-                  control={form.control}
-                  name="firstName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Ad</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          value={field.value || ""}
-                          placeholder="Adınız"
-                          data-testid="input-firstname"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="lastName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Soyad</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          value={field.value || ""}
-                          placeholder="Soyadınız"
-                          data-testid="input-lastname"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Telefon</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          value={field.value || ""}
-                          placeholder="+90 555 123 4567"
-                          data-testid="input-phone"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="flex gap-2">
-                  <Button
-                    type="submit"
-                    disabled={updateProfileMutation.isPending}
-                    className="flex-1"
-                    data-testid="button-save-profile"
-                  >
-                    <Save className="w-4 h-4 mr-2" />
-                    {updateProfileMutation.isPending ? "Kaydediliyor..." : "Kaydet"}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleCancel}
-                    disabled={updateProfileMutation.isPending}
-                    data-testid="button-cancel-edit"
-                  >
-                    <X className="w-4 h-4 mr-2" />
-                    İptal
-                  </Button>
+      <div className="px-4 py-6 space-y-6 max-w-3xl mx-auto">
+        {/* Profile Information Card */}
+        <Card className="border-2 overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-muted/50 to-muted/30 pb-6">
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-4">
+                <Avatar className="w-20 h-20 border-4 border-background shadow-lg">
+                  <AvatarImage src={user?.profileImageUrl || undefined} />
+                  <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
+                    <User className="w-10 h-10" />
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <CardTitle className="text-2xl" data-testid="text-user-name">
+                    {user?.firstName && user?.lastName
+                      ? `${user.firstName} ${user.lastName}`
+                      : "Kullanıcı"}
+                  </CardTitle>
+                  <CardDescription className="flex items-center gap-2 mt-2" data-testid="text-user-email">
+                    <Mail className="w-4 h-4" />
+                    {user?.email || "email@example.com"}
+                  </CardDescription>
+                  <Badge variant={getRoleBadgeVariant()} className="mt-2" data-testid="badge-user-role">
+                    {getRoleLabel()}
+                  </Badge>
                 </div>
-              </form>
-            </Form>
-          )}
+              </div>
+              {!isEditing && (
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={() => setIsEditing(true)}
+                  disabled={updateProfileMutation.isPending}
+                  data-testid="button-edit-profile"
+                >
+                  <Edit className="w-4 h-4 mr-2" />
+                  Düzenle
+                </Button>
+              )}
+            </div>
+          </CardHeader>
+
+          <CardContent className="p-6">
+            {!isEditing ? (
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-muted-foreground">Ad</label>
+                    <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-md border">
+                      <User className="w-4 h-4 text-muted-foreground" />
+                      <span className="font-medium" data-testid="text-firstname-display">{user?.firstName || "-"}</span>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-muted-foreground">Soyad</label>
+                    <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-md border">
+                      <User className="w-4 h-4 text-muted-foreground" />
+                      <span className="font-medium" data-testid="text-lastname-display">{user?.lastName || "-"}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-muted-foreground">Telefon</label>
+                  <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-md border">
+                    <Phone className="w-4 h-4 text-muted-foreground" />
+                    <span className="font-medium" data-testid="text-phone-display">{user?.phone || "-"}</span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="firstName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Ad</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                              <Input
+                                {...field}
+                                value={field.value || ""}
+                                placeholder="Adınız"
+                                className="pl-10 border-2"
+                                data-testid="input-firstname"
+                              />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="lastName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Soyad</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                              <Input
+                                {...field}
+                                value={field.value || ""}
+                                placeholder="Soyadınız"
+                                className="pl-10 border-2"
+                                data-testid="input-lastname"
+                              />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Telefon Numarası</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                            <Input
+                              {...field}
+                              value={field.value || ""}
+                              type="tel"
+                              maxLength={10}
+                              placeholder="5xxxxxxxxx"
+                              className="pl-10 border-2"
+                              data-testid="input-phone"
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="flex gap-3 pt-2">
+                    <Button
+                      type="submit"
+                      disabled={updateProfileMutation.isPending}
+                      className="flex-1"
+                      data-testid="button-save-profile"
+                    >
+                      <Save className="w-4 h-4 mr-2" />
+                      {updateProfileMutation.isPending ? "Kaydediliyor..." : "Kaydet"}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleCancel}
+                      disabled={updateProfileMutation.isPending}
+                      data-testid="button-cancel-edit"
+                    >
+                      <X className="w-4 h-4 mr-2" />
+                      İptal
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            )}
+          </CardContent>
         </Card>
 
         {/* Admin Access */}
         {(isAdmin || isPersonnel) && (
-          <Card className="p-6">
-            <div className="flex items-center gap-3 mb-2">
-              <Shield className="w-5 h-5 text-primary" />
-              <h3 className="font-semibold">Yönetim Paneli</h3>
-            </div>
-            <p className="text-sm text-muted-foreground mb-4">
-              Yönetim araçlarına erişim
-            </p>
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => setLocation("/admin")}
-              data-testid="button-admin-panel"
-            >
-              Yönetim Paneline Git
-            </Button>
+          <Card className="border-2 overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-primary/5 to-primary/10">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <Shield className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg">Yönetim Paneli</CardTitle>
+                  <CardDescription>Yönetim araçlarına erişim</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="p-6">
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => setLocation("/admin")}
+                data-testid="button-admin-panel"
+              >
+                Yönetim Paneline Git
+              </Button>
+            </CardContent>
           </Card>
         )}
 
-        {/* Logout */}
-        <Card className="p-6">
-          <Button
-            variant="destructive"
-            className="w-full"
-            onClick={handleLogout}
-            data-testid="button-logout"
-          >
-            <LogOut className="w-4 h-4 mr-2" />
-            Çıkış Yap
-          </Button>
+        {/* Logout Section */}
+        <Card className="border-2 border-destructive/20 overflow-hidden">
+          <CardContent className="p-6">
+            <Button
+              variant="destructive"
+              className="w-full"
+              onClick={handleLogout}
+              data-testid="button-logout"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Çıkış Yap
+            </Button>
+          </CardContent>
         </Card>
       </div>
     </div>

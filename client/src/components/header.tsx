@@ -146,7 +146,11 @@ export function Header() {
                 data-testid="button-profile-top"
               >
                 <User className="w-4 h-4" />
-                <span className="font-medium">{user?.firstName || 'Hesabım'}</span>
+                <span className="font-medium">
+                  {user?.firstName && user?.lastName 
+                    ? `${user.firstName} ${user.lastName}` 
+                    : user?.firstName || 'Hesabım'}
+                </span>
               </Button>
             ) : (
               <Button
