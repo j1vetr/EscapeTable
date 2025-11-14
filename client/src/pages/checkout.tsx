@@ -213,7 +213,7 @@ export default function Checkout() {
         productId: item.product.id,
         productName: item.product.name,
         quantity: item.quantity,
-        priceInCents: item.product.priceInCents,
+        productPriceInCents: item.product.priceInCents,
         subtotalInCents: item.product.priceInCents * item.quantity,
       })),
     };
