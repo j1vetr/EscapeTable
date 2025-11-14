@@ -68,9 +68,7 @@ export default function Account() {
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      return await apiRequest("/api/auth/logout", {
-        method: "POST",
-      });
+      return await apiRequest("POST", "/api/auth/logout");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/user"] });
@@ -103,8 +101,7 @@ export default function Account() {
 
   const updateProfileMutation = useMutation<UserType, Error, UpdateUser>({
     mutationFn: async (data: UpdateUser) => {
-      const response = await apiRequest("PUT", "/api/user", data);
-      return response.json();
+      return await apiRequest("PUT", "/api/user", data);
     },
     onSuccess: (updatedUser: UserType) => {
       // Update form with returned data

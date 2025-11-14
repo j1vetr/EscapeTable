@@ -38,11 +38,7 @@ export default function Login() {
 
   const loginMutation = useMutation({
     mutationFn: async (data: LoginFormValues) => {
-      return await apiRequest("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      return await apiRequest("POST", "/api/auth/login", data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/user"] });
@@ -128,10 +124,8 @@ export default function Login() {
 
         <div className="mt-6 text-center text-sm text-muted-foreground">
           Hesabınız yok mu?{" "}
-          <Link href="/register">
-            <a className="text-primary font-medium hover:underline" data-testid="link-register">
-              Kayıt Ol
-            </a>
+          <Link href="/register" className="text-primary font-medium hover:underline" data-testid="link-register">
+            Kayıt Ol
           </Link>
         </div>
       </div>

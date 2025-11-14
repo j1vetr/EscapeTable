@@ -47,11 +47,7 @@ export default function Register() {
 
   const registerMutation = useMutation({
     mutationFn: async (data: Omit<RegisterFormValues, "confirmPassword">) => {
-      return await apiRequest("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      return await apiRequest("POST", "/api/auth/register", data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/user"] });
@@ -197,10 +193,8 @@ export default function Register() {
 
         <div className="mt-6 text-center text-sm text-muted-foreground">
           Zaten hesabınız var mı?{" "}
-          <Link href="/login">
-            <a className="text-primary font-medium hover:underline" data-testid="link-login">
-              Giriş Yap
-            </a>
+          <Link href="/login" className="text-primary font-medium hover:underline" data-testid="link-login">
+            Giriş Yap
           </Link>
         </div>
       </div>
