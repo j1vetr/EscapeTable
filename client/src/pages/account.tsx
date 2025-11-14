@@ -66,8 +66,27 @@ export default function Account() {
     }
   }, [user, isEditing, form]);
 
+  const logoutMutation = useMutation({
+    mutationFn: async () => {
+      return await apiRequest("/api/auth/logout", {
+        method: "POST",
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      setLocation("/login");
+    },
+    onError: () => {
+      toast({
+        title: "Çıkış Başarısız",
+        description: "Bir hata oluştu",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleLogout = () => {
-    window.location.href = "/api/logout";
+    logoutMutation.mutate();
   };
 
   const getRoleLabel = () => {
