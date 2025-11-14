@@ -113,7 +113,7 @@ export default function CategoryDetail() {
                   )}
                 </div>
                 <div className="p-3 space-y-2">
-                  <h3 className="font-semibold text-sm line-clamp-2 min-h-[2.5rem]">
+                  <h3 className="font-bold text-sm line-clamp-2 min-h-[2.5rem]">
                     {product.name}
                   </h3>
                   {product.description && (
