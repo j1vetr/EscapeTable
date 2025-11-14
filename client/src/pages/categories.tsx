@@ -27,7 +27,7 @@ export default function Categories() {
         {isLoading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <Skeleton key={i} className="h-32 rounded-lg" />
+              <Skeleton key={i} className="h-48 rounded-lg" />
             ))}
           </div>
         ) : activeCategories.length > 0 ? (
@@ -35,19 +35,26 @@ export default function Categories() {
             {activeCategories.map((category) => (
               <Card
                 key={category.id}
-                className="p-6 text-center cursor-pointer hover-elevate active-elevate-2"
+                className="overflow-hidden cursor-pointer hover-elevate active-elevate-2"
                 onClick={() => setLocation(`/categories/${category.id}`)}
                 data-testid={`category-card-${category.id}`}
               >
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <ShoppingCart className="w-8 h-8 text-primary" />
+                <div className="aspect-square bg-muted flex items-center justify-center">
+                  {category.imageUrl ? (
+                    <img
+                      src={category.imageUrl}
+                      alt={category.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <ShoppingCart className="w-12 h-12 text-muted-foreground" />
+                  )}
                 </div>
-                <h3 className="font-semibold mb-1">{category.name}</h3>
-                {category.description && (
-                  <p className="text-xs text-muted-foreground line-clamp-2">
-                    {category.description}
+                <div className="p-3">
+                  <p className="text-sm font-medium text-center line-clamp-2">
+                    {category.name}
                   </p>
-                )}
+                </div>
               </Card>
             ))}
           </div>
