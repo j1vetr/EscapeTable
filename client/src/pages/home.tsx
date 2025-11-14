@@ -93,33 +93,22 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+            <div className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide">
               {activeCategories.map((category) => (
-                <Card
+                <div
                   key={category.id}
-                  className="group relative min-w-[160px] max-w-[160px] h-[200px] overflow-hidden cursor-pointer border-0 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
+                  className="group relative min-w-[180px] max-w-[180px] h-[140px] cursor-pointer"
                   onClick={() => setLocation(`/categories/${category.id}`)}
                   data-testid={`category-card-${category.id}`}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary to-primary/80"></div>
-                  <div className="absolute inset-0 bg-muted flex items-center justify-center">
-                    {category.imageUrl ? (
-                      <img
-                        src={category.imageUrl}
-                        alt={category.name}
-                        className="w-full h-full object-cover opacity-30 group-hover:opacity-40 transition-opacity duration-300"
-                      />
-                    ) : (
-                      <ShoppingCart className="w-16 h-16 text-white/30" />
-                    )}
-                  </div>
-                  <div className="absolute inset-0 flex items-center justify-center p-4">
-                    <p className="text-lg font-extrabold text-center text-white drop-shadow-lg line-clamp-3">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/90 to-primary/70 rounded-3xl transition-all duration-500 group-hover:scale-105 group-hover:shadow-[0_0_40px_rgba(25,39,24,0.6)]"></div>
+                  <div className="absolute inset-[2px] bg-gradient-to-br from-white/10 to-transparent rounded-3xl backdrop-blur-sm border border-white/20"></div>
+                  <div className="absolute inset-0 flex items-center justify-center p-5">
+                    <p className="text-xl font-black text-white text-center line-clamp-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)]">
                       {category.name}
                     </p>
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-card via-white to-card transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-                </Card>
+                </div>
               ))}
             </div>
           )}
@@ -138,55 +127,61 @@ export default function Home() {
               ))}
             </div>
           ) : activeFeaturedProducts.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
               {activeFeaturedProducts.map((product) => (
-                <Card
+                <div
                   key={product.id}
-                  className="group relative overflow-hidden cursor-pointer border-0 shadow-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 rounded-2xl"
+                  className="group relative cursor-pointer"
                   onClick={() => setLocation(`/products/${product.id}`)}
                   data-testid={`product-card-${product.id}`}
                 >
-                  <div className="aspect-square bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center overflow-hidden relative">
-                    {product.imageUrl ? (
-                      <img
-                        src={product.imageUrl}
-                        alt={product.name}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:rotate-2"
-                      />
-                    ) : (
-                      <ShoppingCart className="w-20 h-20 text-muted-foreground/30" />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    {product.stock > 0 ? (
-                      <Badge className="absolute top-3 right-3 bg-primary/90 backdrop-blur-sm text-primary-foreground border-0 font-bold px-3 py-1 shadow-lg">
-                        Stokta
-                      </Badge>
-                    ) : (
-                      <Badge variant="destructive" className="absolute top-3 right-3 backdrop-blur-sm font-bold px-3 py-1 shadow-lg">
-                        Tükendi
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="p-5 space-y-4 bg-white dark:bg-card">
-                    <h3 className="font-extrabold line-clamp-2 text-lg min-h-[3.5rem] group-hover:text-primary transition-colors duration-300">
-                      {product.name}
-                    </h3>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-3xl font-black text-primary">
-                        {formatPrice(product.priceInCents)}
-                      </span>
+                  <div className="relative overflow-hidden rounded-3xl bg-white dark:bg-card transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
+                    <div className="aspect-square overflow-hidden relative bg-gradient-to-br from-muted/30 to-muted/10">
+                      {product.imageUrl ? (
+                        <img
+                          src={product.imageUrl}
+                          alt={product.name}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <ShoppingCart className="w-24 h-24 text-muted-foreground/20" />
+                        </div>
+                      )}
+                      {product.stock > 0 ? (
+                        <div className="absolute top-3 right-3 px-4 py-1.5 bg-primary/95 backdrop-blur-md rounded-full border border-white/30 shadow-lg">
+                          <span className="text-xs font-bold text-white">Stokta</span>
+                        </div>
+                      ) : (
+                        <div className="absolute top-3 right-3 px-4 py-1.5 bg-destructive/95 backdrop-blur-md rounded-full border border-white/30 shadow-lg">
+                          <span className="text-xs font-bold text-white">Tükendi</span>
+                        </div>
+                      )}
                     </div>
-                    <Button
-                      size="default"
-                      className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground font-extrabold text-base shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl"
-                      disabled={product.stock === 0}
-                      data-testid={`button-add-to-cart-${product.id}`}
-                    >
-                      <ShoppingCart className="w-5 h-5 mr-2" />
-                      Sepete Ekle
-                    </Button>
+                    <div className="p-5 space-y-3">
+                      <h3 className="font-bold text-base line-clamp-2 min-h-[3rem] transition-colors group-hover:text-primary">
+                        {product.name}
+                      </h3>
+                      <div className="flex items-center justify-between">
+                        <span className="text-2xl font-black bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+                          {formatPrice(product.priceInCents)}
+                        </span>
+                      </div>
+                      <button
+                        className="w-full relative overflow-hidden rounded-2xl bg-primary p-3.5 font-bold text-white transition-all duration-300 hover:shadow-[0_0_30px_rgba(25,39,24,0.4)] disabled:opacity-50 disabled:cursor-not-allowed group/btn"
+                        disabled={product.stock === 0}
+                        data-testid={`button-add-to-cart-${product.id}`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-700"></div>
+                        <div className="relative flex items-center justify-center gap-2">
+                          <ShoppingCart className="w-5 h-5" />
+                          <span>Sepete Ekle</span>
+                        </div>
+                      </button>
+                    </div>
                   </div>
-                </Card>
+                </div>
               ))}
             </div>
           ) : (
