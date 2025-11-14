@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { useLocation } from "wouter";
 import { useCartContext } from "@/context/CartContext";
 import { useAuth } from "@/hooks/useAuth";
-import logoUrl from "@assets/escape logo ack_1763093068956.png";
+import logoUrl from "@assets/Escape-Table-Logo---Koyu_1763093921312.png";
 
 export function Header() {
   const [, setLocation] = useLocation();
