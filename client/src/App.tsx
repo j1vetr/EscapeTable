@@ -20,6 +20,7 @@ import Checkout from "@/pages/checkout";
 import Orders from "@/pages/orders";
 import Account from "@/pages/account";
 import Login from "@/pages/login";
+import Register from "@/pages/register";
 
 // Admin Pages
 import AdminDashboard from "@/pages/admin/dashboard";
@@ -40,6 +41,7 @@ function CustomerRouter() {
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
         <Route path="/categories" component={Categories} />
         <Route path="/categories/:id" component={CategoryDetail} />
         <Route path="/products/:id" component={ProductDetail} />
@@ -83,13 +85,22 @@ function LoginPrompt() {
         <p className="text-muted-foreground">
           Bu sayfaya erişmek için giriş yapmanız gerekiyor.
         </p>
-        <a
-          href="/api/auth/login"
-          className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-md font-medium hover-elevate active-elevate-2"
-          data-testid="button-login"
-        >
-          Giriş Yap
-        </a>
+        <div className="flex flex-col gap-3">
+          <a
+            href="/login"
+            className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-md font-medium hover-elevate active-elevate-2"
+            data-testid="button-login"
+          >
+            Giriş Yap
+          </a>
+          <a
+            href="/register"
+            className="inline-block bg-secondary text-secondary-foreground px-6 py-3 rounded-md font-medium hover-elevate active-elevate-2"
+            data-testid="button-register"
+          >
+            Kayıt Ol
+          </a>
+        </div>
       </div>
     </div>
   );
