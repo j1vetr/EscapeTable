@@ -34,9 +34,7 @@ sudo ufw status
 
 ---
 
-## 📦 Adım 1: Proje Dosyalarını Sunucuya Aktarma
-
-### Option A: Git ile (Önerilen)
+## 📦 Adım 1: Proje Dosyalarını GitHub'dan İndirin
 
 ```bash
 # Sunucuya SSH ile bağlanın
@@ -45,28 +43,21 @@ ssh kullanıcı@sunucu-ip
 # Proje dizini oluşturun
 sudo mkdir -p /var/www/escapetable
 sudo chown -R $USER:$USER /var/www/escapetable
-cd /var/www/escapetable
 
-# Git repository'yi klonlayın
-git clone https://github.com/kullanıcı-adı/escapetable.git .
-# veya private repo için:
-# git clone https://<TOKEN>@github.com/kullanıcı-adı/escapetable.git .
+# GitHub'dan klonlayın
+cd /var/www
+git clone https://github.com/j1vetr/EscapeTable.git escapetable
+
+# Dizine girin
+cd escapetable
+
+# Dosyaları kontrol edin
+ls -la
 ```
 
-### Option B: Dosyaları SCP/SFTP ile Upload
-
+**Not:** Repo public olduğu için direkt clone edebilirsiniz. Git yüklü değilse:
 ```bash
-# Local makinenizden (projenizin bulunduğu klasörde):
-tar -czf escapetable.tar.gz .
-scp escapetable.tar.gz kullanıcı@sunucu-ip:/var/www/
-
-# Sunucuda:
-cd /var/www
-sudo mkdir -p escapetable
-sudo chown -R $USER:$USER escapetable
-cd escapetable
-tar -xzf ../escapetable.tar.gz
-rm ../escapetable.tar.gz
+sudo apt install git -y
 ```
 
 ---
