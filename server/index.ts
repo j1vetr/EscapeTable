@@ -2,6 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupAuth } from "./replitAuth";
 import { setupVite, serveStatic, log } from "./vite";
+import path from "path";
 
 const app = express();
 
@@ -48,6 +49,9 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Serve static assets (product/category images)
+  app.use('/attached_assets', express.static(path.join(import.meta.dirname, '..', 'attached_assets')));
+  
   // Setup authentication
   await setupAuth(app);
   
