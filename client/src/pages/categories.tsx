@@ -31,30 +31,32 @@ export default function Categories() {
             ))}
           </div>
         ) : activeCategories.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {activeCategories.map((category) => (
               <Card
                 key={category.id}
-                className="overflow-hidden cursor-pointer hover-elevate active-elevate-2"
+                className="group relative h-[240px] overflow-hidden cursor-pointer border-0 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 rounded-2xl"
                 onClick={() => setLocation(`/categories/${category.id}`)}
                 data-testid={`category-card-${category.id}`}
               >
-                <div className="aspect-square bg-muted flex items-center justify-center">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary to-primary/80"></div>
+                <div className="absolute inset-0 bg-muted flex items-center justify-center">
                   {category.imageUrl ? (
                     <img
                       src={category.imageUrl}
                       alt={category.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover opacity-30 group-hover:opacity-40 transition-opacity duration-300"
                     />
                   ) : (
-                    <ShoppingCart className="w-12 h-12 text-muted-foreground" />
+                    <ShoppingCart className="w-20 h-20 text-white/30" />
                   )}
                 </div>
-                <div className="p-3 bg-primary">
-                  <p className="text-sm font-semibold text-center line-clamp-2 text-primary-foreground">
+                <div className="absolute inset-0 flex items-center justify-center p-6">
+                  <p className="text-2xl font-black text-center text-white drop-shadow-2xl line-clamp-3">
                     {category.name}
                   </p>
                 </div>
+                <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-card via-white to-card transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
               </Card>
             ))}
           </div>

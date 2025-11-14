@@ -97,26 +97,28 @@ export default function Home() {
               {activeCategories.map((category) => (
                 <Card
                   key={category.id}
-                  className="min-w-[140px] max-w-[140px] overflow-hidden cursor-pointer hover-elevate active-elevate-2"
+                  className="group relative min-w-[160px] max-w-[160px] h-[200px] overflow-hidden cursor-pointer border-0 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
                   onClick={() => setLocation(`/categories/${category.id}`)}
                   data-testid={`category-card-${category.id}`}
                 >
-                  <div className="aspect-square bg-muted flex items-center justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary to-primary/80"></div>
+                  <div className="absolute inset-0 bg-muted flex items-center justify-center">
                     {category.imageUrl ? (
                       <img
                         src={category.imageUrl}
                         alt={category.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover opacity-30 group-hover:opacity-40 transition-opacity duration-300"
                       />
                     ) : (
-                      <ShoppingCart className="w-12 h-12 text-muted-foreground" />
+                      <ShoppingCart className="w-16 h-16 text-white/30" />
                     )}
                   </div>
-                  <div className="p-3 bg-primary">
-                    <p className="text-sm font-semibold text-center line-clamp-2 text-primary-foreground">
+                  <div className="absolute inset-0 flex items-center justify-center p-4">
+                    <p className="text-lg font-extrabold text-center text-white drop-shadow-lg line-clamp-3">
                       {category.name}
                     </p>
                   </div>
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-card via-white to-card transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
                 </Card>
               ))}
             </div>
@@ -136,50 +138,51 @@ export default function Home() {
               ))}
             </div>
           ) : activeFeaturedProducts.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {activeFeaturedProducts.map((product) => (
                 <Card
                   key={product.id}
-                  className="group overflow-hidden hover-elevate cursor-pointer border-0 shadow-lg"
+                  className="group relative overflow-hidden cursor-pointer border-0 shadow-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 rounded-2xl"
                   onClick={() => setLocation(`/products/${product.id}`)}
                   data-testid={`product-card-${product.id}`}
                 >
-                  <div className="aspect-square bg-muted flex items-center justify-center overflow-hidden relative">
+                  <div className="aspect-square bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center overflow-hidden relative">
                     {product.imageUrl ? (
                       <img
                         src={product.imageUrl}
                         alt={product.name}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:rotate-2"
                       />
                     ) : (
-                      <ShoppingCart className="w-12 h-12 text-muted-foreground" />
+                      <ShoppingCart className="w-20 h-20 text-muted-foreground/30" />
                     )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     {product.stock > 0 ? (
-                      <Badge className="absolute top-2 right-2 bg-primary text-primary-foreground border-0">
+                      <Badge className="absolute top-3 right-3 bg-primary/90 backdrop-blur-sm text-primary-foreground border-0 font-bold px-3 py-1 shadow-lg">
                         Stokta
                       </Badge>
                     ) : (
-                      <Badge variant="destructive" className="absolute top-2 right-2">
+                      <Badge variant="destructive" className="absolute top-3 right-3 backdrop-blur-sm font-bold px-3 py-1 shadow-lg">
                         Tükendi
                       </Badge>
                     )}
                   </div>
-                  <div className="p-4 space-y-3 bg-white dark:bg-card">
-                    <h3 className="font-bold line-clamp-2 text-base min-h-[2.5rem]">
+                  <div className="p-5 space-y-4 bg-white dark:bg-card">
+                    <h3 className="font-extrabold line-clamp-2 text-lg min-h-[3.5rem] group-hover:text-primary transition-colors duration-300">
                       {product.name}
                     </h3>
-                    <div className="flex items-center justify-between">
-                      <span className="text-2xl font-extrabold text-primary">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-3xl font-black text-primary">
                         {formatPrice(product.priceInCents)}
                       </span>
                     </div>
                     <Button
-                      size="sm"
-                      className="w-full bg-primary hover:bg-primary text-primary-foreground font-bold"
+                      size="default"
+                      className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground font-extrabold text-base shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl"
                       disabled={product.stock === 0}
                       data-testid={`button-add-to-cart-${product.id}`}
                     >
-                      <ShoppingCart className="w-4 h-4 mr-2" />
+                      <ShoppingCart className="w-5 h-5 mr-2" />
                       Sepete Ekle
                     </Button>
                   </div>
