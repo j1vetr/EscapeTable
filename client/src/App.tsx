@@ -7,6 +7,7 @@ import { CartProvider } from "@/context/CartContext";
 import { useAuth } from "@/hooks/useAuth";
 import { MobileNav } from "@/components/mobile-nav";
 import { AdminSidebar } from "@/components/admin-sidebar";
+import { Header } from "@/components/header";
 
 // Customer Pages
 import Landing from "@/pages/landing";
@@ -34,6 +35,7 @@ import NotFound from "@/pages/not-found";
 function CustomerRouter() {
   return (
     <div className="min-h-screen bg-background">
+      <Header />
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/categories" component={Categories} />

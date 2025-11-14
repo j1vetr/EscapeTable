@@ -23,19 +23,8 @@ export default function Home() {
   const activeFeaturedProducts = featuredProducts?.filter((p) => p.isActive) || [];
 
   return (
-    <div className="pb-20">
-      {/* Hero Banner */}
-      <section className="relative bg-primary text-primary-foreground">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/10" />
-        <div className="relative px-4 py-12 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold mb-3 font-heading">
-            Kamp Keyfiniz Yarım Kalmasın
-          </h1>
-          <p className="text-primary-foreground/90 max-w-md mx-auto">
-            Premium ürünlerle kamp deneyiminizi tamamlayın
-          </p>
-        </div>
-      </section>
+    <div className="pb-20 pt-4">
+
 
       {/* Categories Carousel */}
       <section className="py-6 bg-card">
