@@ -14,12 +14,12 @@ export default function CategoryDetail() {
   const categoryId = params?.id;
 
   const { data: category, isLoading: categoryLoading } = useQuery<Category>({
-    queryKey: ["/api/categories", categoryId],
+    queryKey: ["/api/categories", categoryId as string],
     enabled: !!categoryId,
   });
 
   const { data: products, isLoading: productsLoading } = useQuery<Product[]>({
-    queryKey: ["/api/products", { categoryId }],
+    queryKey: [`/api/products?categoryId=${categoryId}`],
     enabled: !!categoryId,
   });
 
