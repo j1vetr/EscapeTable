@@ -1,0 +1,30 @@
+root@162-55-4-35:/var/www/escapetable# curl https://escape.toov.com.tr/attached_assets/generated_images/Food_category_icon_ce060ebe.webp -I
+HTTP/2 404
+server: nginx/1.18.0 (Ubuntu)
+date: Fri, 14 Nov 2025 08:36:52 GMT
+content-type: text/html
+content-length: 162
+
+root@162-55-4-35:/var/www/escapetable# sudo tail -f /var/log/nginx/error.log
+2025/11/14 11:36:45 [error] 3217193#3217193: *13 open() "/var/www/escapetable/dist/public/attached_assets/generated_images/Breakfast_category_icon_87f4303c.webp" failed (2: No such file or directory), client: 78.186.181.196, server: escape.toov.com.tr, request: "GET /attached_assets/generated_images/Breakfast_category_icon_87f4303c.webp HTTP/2.0", host: "escape.toov.com.tr", referrer: "https://escape.toov.com.tr/"
+2025/11/14 11:36:45 [error] 3217193#3217193: *13 open() "/var/www/escapetable/dist/public/attached_assets/generated_images/BBQ_and_grill_category_150808fb.webp" failed (2: No such file or directory), client: 78.186.181.196, server: escape.toov.com.tr, request: "GET /attached_assets/generated_images/BBQ_and_grill_category_150808fb.webp HTTP/2.0", host: "escape.toov.com.tr", referrer: "https://escape.toov.com.tr/"
+2025/11/14 11:36:45 [error] 3217193#3217193: *13 open() "/var/www/escapetable/dist/public/attached_assets/generated_images/Bakery_category_icon_e558c3eb.webp" failed (2: No such file or directory), client: 78.186.181.196, server: escape.toov.com.tr, request: "GET /attached_assets/generated_images/Bakery_category_icon_e558c3eb.webp HTTP/2.0", host: "escape.toov.com.tr", referrer: "https://escape.toov.com.tr/"
+2025/11/14 11:36:45 [error] 3217193#3217193: *13 open() "/var/www/escapetable/dist/public/attached_assets/generated_images/Snacks_category_icon_f34067f2.webp" failed (2: No such file or directory), client: 78.186.181.196, server: escape.toov.com.tr, request: "GET /attached_assets/generated_images/Snacks_category_icon_f34067f2.webp HTTP/2.0", host: "escape.toov.com.tr", referrer: "https://escape.toov.com.tr/"
+2025/11/14 11:36:45 [error] 3217193#3217193: *13 open() "/var/www/escapetable/dist/public/attached_assets/generated_images/Cleaning_category_icon_30660aed.webp" failed (2: No such file or directory), client: 78.186.181.196, server: escape.toov.com.tr, request: "GET /attached_assets/generated_images/Cleaning_category_icon_30660aed.webp HTTP/2.0", host: "escape.toov.com.tr", referrer: "https://escape.toov.com.tr/"
+2025/11/14 11:36:45 [error] 3217193#3217193: *13 open() "/var/www/escapetable/dist/public/attached_assets/generated_images/Camping_gear_category_b36d2ffc.webp" failed (2: No such file or directory), client: 78.186.181.196, server: escape.toov.com.tr, request: "GET /attached_assets/generated_images/Camping_gear_category_b36d2ffc.webp HTTP/2.0", host: "escape.toov.com.tr", referrer: "https://escape.toov.com.tr/"
+2025/11/14 11:36:45 [error] 3217193#3217193: *13 open() "/var/www/escapetable/dist/public/attached_assets/generated_images/White_cheese_product_photo_f516c740.webp" failed (2: No such file or directory), client: 78.186.181.196, server: escape.toov.com.tr, request: "GET /attached_assets/generated_images/White_cheese_product_photo_f516c740.webp HTTP/2.0", host: "escape.toov.com.tr", referrer: "https://escape.toov.com.tr/"
+2025/11/14 11:36:45 [error] 3217193#3217193: *13 open() "/var/www/escapetable/dist/public/attached_assets/generated_images/Makarna_package_product_photo_46810de2.webp" failed (2: No such file or directory), client: 78.186.181.196, server: escape.toov.com.tr, request: "GET /attached_assets/generated_images/Makarna_package_product_photo_46810de2.webp HTTP/2.0", host: "escape.toov.com.tr", referrer: "https://escape.toov.com.tr/"
+2025/11/14 11:36:45 [error] 3217193#3217193: *13 open() "/var/www/escapetable/dist/public/attached_assets/generated_images/Water_bottle_product_photo_e0bd2ab4.webp" failed (2: No such file or directory), client: 78.186.181.196, server: escape.toov.com.tr, request: "GET /attached_assets/generated_images/Water_bottle_product_photo_e0bd2ab4.webp HTTP/2.0", host: "escape.toov.com.tr", referrer: "https://escape.toov.com.tr/"
+2025/11/14 11:36:52 [error] 3217193#3217193: *29 open() "/var/www/escapetable/dist/public/attached_assets/generated_images/Food_category_icon_ce060ebe.webp" failed (2: No such file or directory), client: 162.55.4.35, server: escape.toov.com.tr, request: "HEAD /attached_assets/generated_images/Food_category_icon_ce060ebe.webp HTTP/2.0", host: "escape.toov.com.tr"
+curl https://escape.toov.com.tr/attached_assets/generated_images/Food_category_icon_ce060ebe.webp -I
+
+^C
+root@162-55-4-35:/var/www/escapetable# curl https://escape.toov.com.tr/attached_assets/generated_images/Food_category_icon_ce060ebe.webp -I
+
+HTTP/2 404
+server: nginx/1.18.0 (Ubuntu)
+date: Fri, 14 Nov 2025 08:37:15 GMT
+content-type: text/html
+content-length: 162
+
+root@162-55-4-35:/var/www/escapetable#
