@@ -10,6 +10,7 @@ import {
   insertOrderSchema,
   insertOrderItemSchema,
   insertSettingSchema,
+  updateUserSchema,
 } from "@shared/schema";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
@@ -32,6 +33,27 @@ export function registerRoutes(app: Express) {
 
       res.json(dbUser);
     } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Update current user profile
+  app.put("/api/user", isAuthenticated, async (req, res) => {
+    try {
+      const user = req.user as any;
+      const validatedData = updateUserSchema.parse(req.body);
+      
+      const updatedUser = await storage.updateUser(user.claims.sub, validatedData);
+      
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.json(updatedUser);
+    } catch (error: any) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: fromZodError(error).message });
+      }
       res.status(500).json({ message: error.message });
     }
   });

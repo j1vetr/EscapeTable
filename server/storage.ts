@@ -12,6 +12,7 @@ import {
   auditLogs,
   type User,
   type UpsertUser,
+  type UpdateUser,
   type Category,
   type InsertCategory,
   type Product,
@@ -41,6 +42,7 @@ export interface IStorage {
   // User operations (required for Replit Auth)
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
+  updateUser(id: string, data: UpdateUser): Promise<User | undefined>;
 
   // Category operations
   getCategories(): Promise<Category[]>;
@@ -124,6 +126,15 @@ export class DatabaseStorage implements IStorage {
       })
       .returning();
     return user;
+  }
+
+  async updateUser(id: string, data: UpdateUser): Promise<User | undefined> {
+    const [updated] = await db
+      .update(users)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(users.id, id))
+      .returning();
+    return updated;
   }
 
   // Category operations

@@ -40,6 +40,7 @@ export const users = pgTable("users", {
   email: varchar("email").unique(),
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
+  phone: varchar("phone", { length: 20 }),
   profileImageUrl: varchar("profile_image_url"),
   role: userRoleEnum("role").default('customer').notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -269,6 +270,12 @@ export const upsertUserSchema = createInsertSchema(users).omit({
   role: true,
 });
 
+export const updateUserSchema = z.object({
+  firstName: z.string().min(1, "Ad gerekli").optional(),
+  lastName: z.string().min(1, "Soyad gerekli").optional(),
+  phone: z.string().max(20).optional().nullable(),
+});
+
 export const insertCategorySchema = createInsertSchema(categories).omit({
   id: true,
   createdAt: true,
@@ -328,6 +335,7 @@ export const insertAuditLogSchema = createInsertSchema(auditLogs).omit({
 export type User = typeof users.$inferSelect;
 export type UpsertUser = z.infer<typeof upsertUserSchema>;
 export type InsertUser = z.infer<typeof insertUserSchema>;
+export type UpdateUser = z.infer<typeof updateUserSchema>;
 
 export type Category = typeof categories.$inferSelect;
 export type InsertCategory = z.infer<typeof insertCategorySchema>;
