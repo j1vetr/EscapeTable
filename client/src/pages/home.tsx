@@ -23,9 +23,7 @@ export default function Home() {
   const activeFeaturedProducts = featuredProducts?.filter((p) => p.isActive) || [];
 
   return (
-    <div className="pb-20 pt-4">
-
-
+    <div className="pb-20">
       {/* Categories Carousel */}
       <section className="py-6 bg-card">
         <div className="px-4">

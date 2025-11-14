@@ -1,4 +1,4 @@
-import { MapPin, User, Search, ChevronDown } from "lucide-react";
+import { MapPin, User, Search, ChevronDown, LogIn } from "lucide-react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { useTypingPlaceholder } from "@/hooks/useTypingPlaceholder";
 import { formatPrice } from "@/lib/authUtils";
 import logoUrl from "@assets/Escape-Table-Logo---Koyu_1763093921312.png";
@@ -137,41 +138,55 @@ export function Header() {
           <div className="flex items-center gap-3">
             {/* Desktop: Profile/Login (NO CART - bottom nav has it) */}
             {isAuthenticated ? (
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => setLocation("/account")}
-                className="hidden md:flex items-center gap-1 hover:underline"
+                className="hidden md:flex items-center gap-2 text-primary-foreground hover:bg-primary-foreground/10"
                 data-testid="button-profile-top"
               >
                 <User className="w-4 h-4" />
-              </button>
+                <span className="font-medium">{user?.firstName || 'Hesabım'}</span>
+              </Button>
             ) : (
-              <a 
-                href="/api/auth/login"
-                className="hidden md:inline text-sm font-medium hover:underline"
+              <Button
+                variant="outline"
+                size="sm"
+                asChild
+                className="hidden md:flex items-center gap-2 bg-card hover:bg-card text-primary border-primary-foreground/20"
                 data-testid="link-login-desktop"
               >
-                Giriş Yap / Kayıt Ol
-              </a>
+                <a href="/api/auth/login">
+                  <LogIn className="w-4 h-4" />
+                  <span className="font-medium">Giriş Yap</span>
+                </a>
+              </Button>
             )}
 
-            {/* Mobile: Text Link (NO CART - bottom nav has it) */}
+            {/* Mobile: Button Style */}
             <div className="md:hidden">
               {isAuthenticated ? (
-                <button
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={() => setLocation("/account")}
-                  className="text-sm font-medium hover:underline"
+                  className="text-primary-foreground hover:bg-primary-foreground/10"
                   data-testid="button-account-mobile"
                 >
-                  {user?.firstName || 'Hesabım'}
-                </button>
+                  <User className="w-4 h-4" />
+                </Button>
               ) : (
-                <a 
-                  href="/api/auth/login"
-                  className="text-sm font-medium hover:underline"
+                <Button
+                  variant="outline"
+                  size="sm"
+                  asChild
+                  className="bg-card hover:bg-card text-primary border-primary-foreground/20"
                   data-testid="link-login-mobile"
                 >
-                  Giriş Yap / Kayıt Ol
-                </a>
+                  <a href="/api/auth/login">
+                    <LogIn className="w-4 h-4" />
+                  </a>
+                </Button>
               )}
             </div>
           </div>
