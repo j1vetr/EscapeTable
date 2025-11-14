@@ -25,7 +25,7 @@ export function registerRoutes(app: Express) {
   app.get("/api/user", isAuthenticated, async (req, res) => {
     try {
       const user = req.user as any;
-      const dbUser = await storage.getUser(user.claims.sub);
+      const dbUser = await storage.getUser(user.id);
       
       if (!dbUser) {
         return res.status(404).json({ message: "User not found" });
@@ -43,7 +43,7 @@ export function registerRoutes(app: Express) {
       const user = req.user as any;
       const validatedData = updateUserSchema.parse(req.body);
       
-      const updatedUser = await storage.updateUser(user.claims.sub, validatedData);
+      const updatedUser = await storage.updateUser(user.id, validatedData);
       
       if (!updatedUser) {
         return res.status(404).json({ message: "User not found" });
@@ -397,7 +397,7 @@ export function registerRoutes(app: Express) {
   app.get("/api/orders", isAuthenticated, async (req, res) => {
     try {
       const user = req.user as any;
-      const dbUser = await storage.getUser(user.claims.sub);
+      const dbUser = await storage.getUser(user.id);
       
       if (!dbUser) {
         return res.status(404).json({ message: "User not found" });
@@ -436,7 +436,7 @@ export function registerRoutes(app: Express) {
 
       // Check if user owns this order or is admin
       const user = req.user as any;
-      const dbUser = await storage.getUser(user.claims.sub);
+      const dbUser = await storage.getUser(user.id);
       
       if (!dbUser || (order.userId !== dbUser.id && dbUser.role !== 'admin' && dbUser.role !== 'personnel')) {
         return res.status(403).json({ message: "Forbidden" });
@@ -452,7 +452,7 @@ export function registerRoutes(app: Express) {
   app.post("/api/orders", isAuthenticated, async (req, res) => {
     try {
       const user = req.user as any;
-      const dbUser = await storage.getUser(user.claims.sub);
+      const dbUser = await storage.getUser(user.id);
       
       if (!dbUser) {
         return res.status(404).json({ message: "User not found" });
