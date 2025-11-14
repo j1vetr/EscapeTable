@@ -58,6 +58,7 @@ export default function Checkout() {
   const [deliveryNote, setDeliveryNote] = useState("");
   const [selectedDay, setSelectedDay] = useState<"today" | "tomorrow">("today");
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("");
+  const [originalSlotDate, setOriginalSlotDate] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<string>("cash");
   
   // Keep current time fresh to recalculate slots as Istanbul time advances
@@ -95,7 +96,7 @@ export default function Checkout() {
   // Smart midnight rollover: preserve user's intended date
   // Only allow tomorrow→today migration, prevent multi-day drift
   useEffect(() => {
-    if (selectedTimeSlot) {
+    if (selectedTimeSlot && originalSlotDate) {
       const selectedHour = parseInt(selectedTimeSlot.split('-').pop() || '0');
       
       // Check if hour exists in today's slots
@@ -103,28 +104,44 @@ export default function Checkout() {
         parseInt(s.id.split('-').pop() || '0') === selectedHour
       );
       
+      // Get current slot's date to check against original
+      const currentSlot = availableSlots.find(s => s.id === selectedTimeSlot);
+      const currentSlotDate = currentSlot ? formatInTimeZone(currentSlot.date, ISTANBUL_TIMEZONE, "yyyy-MM-dd") : null;
+      
       if (selectedDay === "tomorrow" && todayHasHour) {
-        // Midnight rollover: user's "tomorrow" became "today"
-        // This preserves the user's original calendar date choice
-        setSelectedDay("today");
-        setSelectedTimeSlot(todayHasHour.id);
+        // Check if midnight actually passed (tomorrow's date became today's date)
+        const todaySlotDate = timeSlots.today[0] ? 
+          formatInTimeZone(timeSlots.today[0].date, ISTANBUL_TIMEZONE, "yyyy-MM-dd") : null;
+        
+        if (originalSlotDate === todaySlotDate) {
+          // Midnight rollover confirmed: user's "tomorrow" became "today"
+          setSelectedDay("today");
+          setSelectedTimeSlot(todayHasHour.id);
+          // Keep originalSlotDate unchanged (user's intent)
+        }
+      } else if (currentSlotDate !== originalSlotDate) {
+        // Current slot date doesn't match user's original selection
+        // This means multiple midnights passed - clear selection
+        setSelectedTimeSlot("");
+        setOriginalSlotDate(null);
       } else if (selectedDay === "today" && !todayHasHour) {
         // Hour passed or became unavailable
         // Clear selection (don't drift to tomorrow)
         setSelectedTimeSlot("");
-      } else {
-        // Normal case: just update ID for current day
-        const currentSlots = selectedDay === "today" ? timeSlots.today : timeSlots.tomorrow;
-        const matchingSlot = currentSlots.find(s => 
-          parseInt(s.id.split('-').pop() || '0') === selectedHour
-        );
-        
-        if (matchingSlot && matchingSlot.id !== selectedTimeSlot) {
-          setSelectedTimeSlot(matchingSlot.id);
-        }
+        setOriginalSlotDate(null);
       }
     }
-  }, [timeSlots, selectedTimeSlot, selectedDay]);
+  }, [timeSlots, selectedTimeSlot, selectedDay, originalSlotDate, availableSlots]);
+
+  // Handler to track original slot date when user selects
+  const handleTimeSlotSelect = (slotId: string) => {
+    const slot = availableSlots.find(s => s.id === slotId);
+    if (slot) {
+      setSelectedTimeSlot(slotId);
+      // Store original date to prevent multi-day drift
+      setOriginalSlotDate(formatInTimeZone(slot.date, ISTANBUL_TIMEZONE, "yyyy-MM-dd"));
+    }
+  };
 
   const canProceedStep1 = selectedLocation !== "";
   const canProceedStep2 = selectedTimeSlot !== "";
@@ -329,6 +346,7 @@ export default function Checkout() {
                   onClick={() => {
                     setSelectedDay("today");
                     setSelectedTimeSlot("");
+                    setOriginalSlotDate(null);
                   }}
                   className={`p-4 border-2 rounded-md text-left hover-elevate active-elevate-2 ${
                     selectedDay === "today" ? "border-primary bg-primary/5" : ""
@@ -345,6 +363,7 @@ export default function Checkout() {
                   onClick={() => {
                     setSelectedDay("tomorrow");
                     setSelectedTimeSlot("");
+                    setOriginalSlotDate(null);
                   }}
                   className={`p-4 border-2 rounded-md text-left hover-elevate active-elevate-2 ${
                     selectedDay === "tomorrow" ? "border-primary bg-primary/5" : ""
@@ -369,7 +388,7 @@ export default function Checkout() {
                   <p className="text-sm mt-1">Lütfen yarın için sipariş verin.</p>
                 </div>
               ) : (
-                <RadioGroup value={selectedTimeSlot} onValueChange={setSelectedTimeSlot}>
+                <RadioGroup value={selectedTimeSlot} onValueChange={handleTimeSlotSelect}>
                   <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto">
                     {availableSlots.map((slot) => (
                       <div

@@ -179,23 +179,23 @@ export default function Account() {
         {/* Profile Information Card */}
         <Card className="border-2 overflow-hidden">
           <CardHeader className="bg-gradient-to-r from-muted/50 to-muted/30 pb-6">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-4">
-                <Avatar className="w-20 h-20 border-4 border-background shadow-lg">
+            <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+              <div className="flex items-center gap-4 flex-1 min-w-0">
+                <Avatar className="w-20 h-20 border-4 border-background shadow-lg flex-shrink-0">
                   <AvatarImage src={user?.profileImageUrl || undefined} />
                   <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
                     <User className="w-10 h-10" />
                   </AvatarFallback>
                 </Avatar>
-                <div className="flex-1">
-                  <CardTitle className="text-2xl" data-testid="text-user-name">
+                <div className="flex-1 min-w-0">
+                  <CardTitle className="text-2xl truncate" data-testid="text-user-name">
                     {user?.firstName && user?.lastName
                       ? `${user.firstName} ${user.lastName}`
                       : "Kullanıcı"}
                   </CardTitle>
-                  <CardDescription className="flex items-center gap-2 mt-2" data-testid="text-user-email">
-                    <Mail className="w-4 h-4" />
-                    {user?.email || "email@example.com"}
+                  <CardDescription className="flex items-center gap-2 mt-2 truncate" data-testid="text-user-email">
+                    <Mail className="w-4 h-4 flex-shrink-0" />
+                    <span className="truncate">{user?.email || "email@example.com"}</span>
                   </CardDescription>
                   <Badge variant={getRoleBadgeVariant()} className="mt-2" data-testid="badge-user-role">
                     {getRoleLabel()}
@@ -208,6 +208,7 @@ export default function Account() {
                   size="sm"
                   onClick={() => setIsEditing(true)}
                   disabled={updateProfileMutation.isPending}
+                  className="w-full sm:w-auto flex-shrink-0"
                   data-testid="button-edit-profile"
                 >
                   <Edit className="w-4 h-4 mr-2" />
