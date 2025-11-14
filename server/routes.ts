@@ -107,6 +107,20 @@ export function registerRoutes(app: Express) {
 
   // ===== PRODUCT ENDPOINTS =====
   
+  // Search products
+  app.get("/api/products/search", async (req, res) => {
+    try {
+      const query = req.query.q as string | undefined;
+      if (!query || query.length < 3) {
+        return res.json([]);
+      }
+      const products = await storage.searchProducts(query, 5);
+      res.json(products);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
   // Get all products (with optional category filter)
   app.get("/api/products", async (req, res) => {
     try {

@@ -34,7 +34,7 @@ import {
   type InsertAuditLog,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, desc, sql, gte } from "drizzle-orm";
+import { eq, and, desc, sql, gte, ilike } from "drizzle-orm";
 
 // Interface for storage operations
 export interface IStorage {
@@ -52,6 +52,7 @@ export interface IStorage {
   // Product operations
   getProducts(filters?: { categoryId?: string }): Promise<Product[]>;
   getFeaturedProducts(): Promise<Product[]>;
+  searchProducts(query: string, limit?: number): Promise<Product[]>;
   getProduct(id: string): Promise<Product | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
   updateProduct(id: string, product: Partial<InsertProduct>): Promise<Product | undefined>;
@@ -164,6 +165,21 @@ export class DatabaseStorage implements IStorage {
 
   async getFeaturedProducts(): Promise<Product[]> {
     return db.select().from(products).where(eq(products.isFeatured, true)).orderBy(products.name);
+  }
+
+  async searchProducts(query: string, limit: number = 5): Promise<Product[]> {
+    if (query.length < 3) {
+      return [];
+    }
+    return db
+      .select()
+      .from(products)
+      .where(and(
+        ilike(products.name, `%${query}%`),
+        eq(products.isActive, true)
+      ))
+      .orderBy(products.name)
+      .limit(limit);
   }
 
   async getProduct(id: string): Promise<Product | undefined> {
