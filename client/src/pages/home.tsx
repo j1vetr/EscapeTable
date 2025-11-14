@@ -93,22 +93,30 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide">
+            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
               {activeCategories.map((category) => (
-                <div
+                <Card
                   key={category.id}
-                  className="group relative min-w-[180px] max-w-[180px] h-[140px] cursor-pointer"
+                  className="group relative min-w-[120px] max-w-[120px] h-[120px] overflow-hidden cursor-pointer border-2 border-primary transition-all duration-300 hover:shadow-lg"
                   onClick={() => setLocation(`/categories/${category.id}`)}
                   data-testid={`category-card-${category.id}`}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/90 to-primary/70 rounded-3xl transition-all duration-500 group-hover:scale-105 group-hover:shadow-[0_0_40px_rgba(25,39,24,0.6)]"></div>
-                  <div className="absolute inset-[2px] bg-gradient-to-br from-white/10 to-transparent rounded-3xl backdrop-blur-sm border border-white/20"></div>
-                  <div className="absolute inset-0 flex items-center justify-center p-5">
-                    <p className="text-xl font-black text-white text-center line-clamp-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)]">
+                  {category.imageUrl && (
+                    <div className="absolute inset-0">
+                      <img
+                        src={category.imageUrl}
+                        alt={category.name}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-primary/60"></div>
+                    </div>
+                  )}
+                  <div className="absolute inset-0 flex items-center justify-center p-2">
+                    <p className="text-sm font-bold text-white text-center line-clamp-2">
                       {category.name}
                     </p>
                   </div>
-                </div>
+                </Card>
               ))}
             </div>
           )}
@@ -127,61 +135,57 @@ export default function Home() {
               ))}
             </div>
           ) : activeFeaturedProducts.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
               {activeFeaturedProducts.map((product) => (
-                <div
+                <Card
                   key={product.id}
-                  className="group relative cursor-pointer"
+                  className="group overflow-hidden cursor-pointer border-2 border-border bg-card transition-all duration-300 hover:shadow-lg hover:border-primary"
                   onClick={() => setLocation(`/products/${product.id}`)}
                   data-testid={`product-card-${product.id}`}
                 >
-                  <div className="relative overflow-hidden rounded-3xl bg-white dark:bg-card transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
-                    <div className="aspect-square overflow-hidden relative bg-gradient-to-br from-muted/30 to-muted/10">
-                      {product.imageUrl ? (
-                        <img
-                          src={product.imageUrl}
-                          alt={product.name}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <ShoppingCart className="w-24 h-24 text-muted-foreground/20" />
-                        </div>
-                      )}
-                      {product.stock > 0 ? (
-                        <div className="absolute top-3 right-3 px-4 py-1.5 bg-primary/95 backdrop-blur-md rounded-full border border-white/30 shadow-lg">
-                          <span className="text-xs font-bold text-white">Stokta</span>
-                        </div>
-                      ) : (
-                        <div className="absolute top-3 right-3 px-4 py-1.5 bg-destructive/95 backdrop-blur-md rounded-full border border-white/30 shadow-lg">
-                          <span className="text-xs font-bold text-white">Tükendi</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-5 space-y-3">
-                      <h3 className="font-bold text-base line-clamp-2 min-h-[3rem] transition-colors group-hover:text-primary">
-                        {product.name}
-                      </h3>
-                      <div className="flex items-center justify-between">
-                        <span className="text-2xl font-black bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                          {formatPrice(product.priceInCents)}
-                        </span>
+                  <div className="aspect-[3/4] overflow-hidden relative bg-muted">
+                    {product.imageUrl ? (
+                      <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <ShoppingCart className="w-16 h-16 text-muted-foreground/30" />
                       </div>
-                      <button
-                        className="w-full relative overflow-hidden rounded-2xl bg-primary p-3.5 font-bold text-white transition-all duration-300 hover:shadow-[0_0_30px_rgba(25,39,24,0.4)] disabled:opacity-50 disabled:cursor-not-allowed group/btn"
-                        disabled={product.stock === 0}
-                        data-testid={`button-add-to-cart-${product.id}`}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-700"></div>
-                        <div className="relative flex items-center justify-center gap-2">
-                          <ShoppingCart className="w-5 h-5" />
-                          <span>Sepete Ekle</span>
-                        </div>
-                      </button>
-                    </div>
+                    )}
+                    {product.stock > 0 ? (
+                      <div className="absolute top-2 right-2 px-2 py-0.5 bg-primary rounded text-[10px] font-semibold text-white">
+                        Stokta
+                      </div>
+                    ) : (
+                      <div className="absolute top-2 right-2 px-2 py-0.5 bg-destructive rounded text-[10px] font-semibold text-white">
+                        Tükendi
+                      </div>
+                    )}
                   </div>
-                </div>
+                  <div className="p-3 space-y-2">
+                    <h3 className="font-semibold text-sm line-clamp-2 min-h-[2.5rem]">
+                      {product.name}
+                    </h3>
+                    <div className="flex items-center justify-between">
+                      <span className="text-lg font-bold text-primary">
+                        {formatPrice(product.priceInCents)}
+                      </span>
+                    </div>
+                    <Button
+                      size="sm"
+                      className="w-full bg-primary hover:bg-primary/90 text-white font-semibold text-xs h-8"
+                      disabled={product.stock === 0}
+                      data-testid={`button-add-to-cart-${product.id}`}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
+                      Sepete Ekle
+                    </Button>
+                  </div>
+                </Card>
               ))}
             </div>
           ) : (

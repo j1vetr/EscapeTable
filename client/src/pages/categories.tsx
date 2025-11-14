@@ -31,22 +31,30 @@ export default function Categories() {
             ))}
           </div>
         ) : activeCategories.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {activeCategories.map((category) => (
-              <div
+              <Card
                 key={category.id}
-                className="group relative h-[200px] cursor-pointer"
+                className="group relative h-[140px] overflow-hidden cursor-pointer border-2 border-primary transition-all duration-300 hover:shadow-lg"
                 onClick={() => setLocation(`/categories/${category.id}`)}
                 data-testid={`category-card-${category.id}`}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/90 to-primary/70 rounded-3xl transition-all duration-500 group-hover:scale-[1.03] group-hover:shadow-[0_0_50px_rgba(25,39,24,0.7)]"></div>
-                <div className="absolute inset-[2px] bg-gradient-to-br from-white/10 to-transparent rounded-3xl backdrop-blur-sm border border-white/20"></div>
-                <div className="absolute inset-0 flex items-center justify-center p-6">
-                  <p className="text-2xl font-black text-white text-center line-clamp-3 drop-shadow-[0_3px_15px_rgba(0,0,0,0.4)]">
+                {category.imageUrl && (
+                  <div className="absolute inset-0">
+                    <img
+                      src={category.imageUrl}
+                      alt={category.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-primary/60"></div>
+                  </div>
+                )}
+                <div className="absolute inset-0 flex items-center justify-center p-4">
+                  <p className="text-base font-bold text-white text-center line-clamp-2">
                     {category.name}
                   </p>
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
         ) : (
