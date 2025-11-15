@@ -18,6 +18,7 @@ import ProductDetail from "@/pages/product-detail";
 import Cart from "@/pages/cart";
 import Checkout from "@/pages/checkout";
 import Orders from "@/pages/orders";
+import OrderSuccess from "@/pages/order-success";
 import Account from "@/pages/account";
 import Login from "@/pages/login";
 import Register from "@/pages/register";
@@ -48,6 +49,7 @@ function CustomerRouter() {
         <Route path="/cart" component={Cart} />
         <Route path="/checkout" component={Checkout} />
         <Route path="/orders" component={Orders} />
+        <Route path="/order-success/:orderId" component={OrderSuccess} />
         <Route path="/account" component={Account} />
         <Route component={NotFound} />
       </Switch>
@@ -131,7 +133,7 @@ function Router() {
   }
 
   // Protected customer routes require authentication
-  const protectedRoutes = ["/checkout", "/orders", "/account"];
+  const protectedRoutes = ["/checkout", "/orders", "/order-success", "/account"];
   if (protectedRoutes.some(route => location.startsWith(route)) && !isAuthenticated) {
     return <LoginPrompt />;
   }

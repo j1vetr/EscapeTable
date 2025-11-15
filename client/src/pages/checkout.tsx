@@ -159,14 +159,11 @@ export default function Checkout() {
     mutationFn: async (orderData: any) => {
       return await apiRequest("POST", "/api/orders", orderData);
     },
-    onSuccess: () => {
+    onSuccess: (data: any) => {
       clearCart();
       queryClient.invalidateQueries({ queryKey: ["/api/orders"] });
-      toast({
-        title: "Sipariş Oluşturuldu",
-        description: "Siparişiniz başarıyla oluşturuldu. Sipariş takibi için siparişlerim sayfasını ziyaret edin.",
-      });
-      setLocation("/orders");
+      const orderId = data.id;
+      setLocation(`/order-success/${orderId}`);
     },
     onError: (error: any) => {
       toast({

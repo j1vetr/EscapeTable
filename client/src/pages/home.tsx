@@ -8,6 +8,7 @@ import { ShoppingCart, ChevronRight, LogIn, Sparkles } from "lucide-react";
 import { useLocation, Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import type { Category, Product } from "@shared/schema";
+import EmptyState from "@/components/empty-state";
 
 export default function Home() {
   const [, setLocation] = useLocation();
@@ -189,9 +190,12 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <Card className="p-8 text-center">
-              <p className="text-muted-foreground">Öne çıkan ürün bulunmuyor</p>
-            </Card>
+            <EmptyState
+              icon={ShoppingCart}
+              title="Öne Çıkan Ürün Yok"
+              description="Yakında premium kamp ürünleri eklenecek"
+              illustration="products"
+            />
           )}
         </div>
       </section>

@@ -15,6 +15,7 @@ export default function ProductDetail() {
   const [, params] = useRoute("/products/:id");
   const [, setLocation] = useLocation();
   const [quantity, setQuantity] = useState(1);
+  const [isAdding, setIsAdding] = useState(false);
   const { addToCart } = useCartContext();
   const { toast } = useToast();
   const productId = params?.id;
@@ -147,15 +148,13 @@ export default function ProductDetail() {
         <div className="space-y-2">
           <Button
             size="lg"
-            className="w-full"
+            className={`w-full transition-transform ${isAdding ? "animate-[pulse-scale_0.3s_ease-in-out]" : ""}`}
             disabled={product.stock === 0}
             onClick={() => {
+              setIsAdding(true);
               addToCart(product, quantity);
-              toast({
-                title: "Sepete Eklendi",
-                description: `${product.name} (${quantity} adet) sepete eklendi`,
-              });
               setQuantity(1);
+              setTimeout(() => setIsAdding(false), 300);
             }}
             data-testid="button-add-to-cart"
           >

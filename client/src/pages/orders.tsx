@@ -3,11 +3,17 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 import { formatPrice, getOrderStatusLabel, getOrderStatusColor } from "@/lib/authUtils";
-import { Package, Calendar, MapPin, CreditCard, ShoppingBag } from "lucide-react";
+import { Package, Calendar, MapPin, CreditCard, ShoppingBag, RotateCw } from "lucide-react";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
-import type { Order } from "@shared/schema";
+import type { Order, Product } from "@shared/schema";
+import EmptyState from "@/components/empty-state";
+import { useLocation } from "wouter";
+import { useCartContext } from "@/context/CartContext";
+import { enhancedToast } from "@/lib/enhanced-toast";
+import { useState } from "react";
 
 interface OrderWithDetails extends Order {
   campingLocation?: {
@@ -17,6 +23,7 @@ interface OrderWithDetails extends Order {
   } | null;
   items?: Array<{
     id: string;
+    productId: string;
     productName: string;
     quantity: number;
     productPriceInCents: number;
@@ -25,9 +32,65 @@ interface OrderWithDetails extends Order {
 }
 
 export default function Orders() {
+  const [, setLocation] = useLocation();
+  const { addToCart } = useCartContext();
+  const [reorderingId, setReorderingId] = useState<string | null>(null);
+  
   const { data: orders, isLoading } = useQuery<OrderWithDetails[]>({
     queryKey: ["/api/orders"],
   });
+
+  // Fetch all products to check stock before reordering
+  const { data: allProducts } = useQuery<Product[]>({
+    queryKey: ["/api/products"],
+  });
+
+  const handleReorder = async (order: OrderWithDetails) => {
+    if (!order.items || !allProducts) return;
+    
+    setReorderingId(order.id);
+    
+    let addedCount = 0;
+    let outOfStockItems: string[] = [];
+    
+    // Check each item and add to cart if in stock
+    for (const item of order.items) {
+      const currentProduct = allProducts.find((p) => p.id === item.productId);
+      
+      if (currentProduct && currentProduct.isActive && currentProduct.stock >= item.quantity) {
+        addToCart(currentProduct, item.quantity);
+        addedCount++;
+      } else if (currentProduct && currentProduct.stock === 0) {
+        outOfStockItems.push(item.productName);
+      }
+    }
+    
+    setTimeout(() => {
+      setReorderingId(null);
+      
+      if (addedCount > 0) {
+        enhancedToast({
+          title: "Ürünler sepete eklendi",
+          description: `${addedCount} ürün sepetinize eklendi${
+            outOfStockItems.length > 0
+              ? `. ${outOfStockItems.length} ürün stokta yok`
+              : ""
+          }`,
+          type: "success",
+        });
+        
+        if (outOfStockItems.length === 0) {
+          setLocation("/cart");
+        }
+      } else {
+        enhancedToast({
+          title: "Ürünler stokta yok",
+          description: "Siparişinizdeki ürünler şu an stokta bulunmuyor",
+          type: "warning",
+        });
+      }
+    }, 500);
+  };
 
   return (
     <div className="pb-20">
@@ -142,17 +205,38 @@ export default function Orders() {
                     </span>
                   </div>
                 </div>
+
+                {/* Reorder Button */}
+                <Separator className="my-3" />
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => handleReorder(order)}
+                  disabled={reorderingId === order.id}
+                  data-testid={`button-reorder-${order.id}`}
+                >
+                  <RotateCw
+                    className={`w-4 h-4 mr-2 ${
+                      reorderingId === order.id ? "animate-spin" : ""
+                    }`}
+                  />
+                  {reorderingId === order.id ? "Sepete Ekleniyor..." : "Tekrar Sipariş Ver"}
+                </Button>
               </Card>
             ))}
           </div>
         ) : (
-          <Card className="p-12 text-center">
-            <Package className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-            <h2 className="text-xl font-semibold mb-2">Henüz Sipariş Yok</h2>
-            <p className="text-muted-foreground">
-              Verdiğiniz siparişler burada görünecek
-            </p>
-          </Card>
+          <EmptyState
+            icon={Package}
+            title="Henüz Sipariş Yok"
+            description="Kamp keyfinizi eksiksiz yaşamak için ilk siparişinizi verin"
+            illustration="orders"
+            action={{
+              label: "Alışverişe Başla",
+              onClick: () => setLocation("/"),
+              testId: "button-start-shopping-orders",
+            }}
+          />
         )}
       </div>
     </div>

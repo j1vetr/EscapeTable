@@ -5,10 +5,31 @@ import { useCartContext } from "@/context/CartContext";
 import { formatPrice } from "@/lib/authUtils";
 import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react";
 import { useLocation } from "wouter";
+import EmptyState from "@/components/empty-state";
+import ProductRecommendations from "@/components/product-recommendations";
+import { useMemo } from "react";
 
 export default function Cart() {
   const [, setLocation] = useLocation();
   const { items: cartItems, totalInCents, updateQuantity, removeFromCart } = useCartContext();
+
+  // Get category IDs and product IDs from cart for recommendations
+  const { categoryIds, productIds } = useMemo(() => {
+    const categories = new Set<string>();
+    const products: string[] = [];
+    
+    cartItems.forEach((item) => {
+      if (item.product.categoryId) {
+        categories.add(item.product.categoryId);
+      }
+      products.push(item.product.id);
+    });
+    
+    return {
+      categoryIds: Array.from(categories),
+      productIds: products,
+    };
+  }, [cartItems]);
 
   if (cartItems.length === 0) {
     return (
@@ -18,16 +39,17 @@ export default function Cart() {
         </div>
         
         <div className="px-4 py-8">
-          <Card className="p-12 text-center">
-            <ShoppingBag className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-            <h2 className="text-xl font-semibold mb-2">Sepetiniz Boş</h2>
-            <p className="text-muted-foreground mb-6">
-              Alışverişe başlamak için ürünleri keşfedin
-            </p>
-            <Button onClick={() => setLocation("/")} data-testid="button-start-shopping">
-              Alışverişe Başla
-            </Button>
-          </Card>
+          <EmptyState
+            icon={ShoppingBag}
+            title="Sepetiniz Boş"
+            description="Kamp ihtiyaçlarınızı sepete ekleyerek hızlıca sipariş verin"
+            illustration="cart"
+            action={{
+              label: "Alışverişe Başla",
+              onClick: () => setLocation("/"),
+              testId: "button-start-shopping",
+            }}
+          />
         </div>
       </div>
     );
@@ -103,6 +125,15 @@ export default function Cart() {
           </Card>
         ))}
       </div>
+
+      {/* Product Recommendations */}
+      {categoryIds.length > 0 && (
+        <ProductRecommendations
+          categoryIds={categoryIds}
+          excludeProductIds={productIds}
+          maxItems={6}
+        />
+      )}
 
       {/* Sticky Cart Summary */}
       <div className="fixed bottom-16 left-0 right-0 bg-card border-t border-card-border p-4 z-40">

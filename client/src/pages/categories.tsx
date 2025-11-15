@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ShoppingCart } from "lucide-react";
 import { useLocation } from "wouter";
 import type { Category } from "@shared/schema";
+import EmptyState from "@/components/empty-state";
 
 export default function Categories() {
   const [, setLocation] = useLocation();
@@ -58,9 +59,12 @@ export default function Categories() {
             ))}
           </div>
         ) : (
-          <Card className="p-8 text-center">
-            <p className="text-muted-foreground">Kategori bulunmuyor</p>
-          </Card>
+          <EmptyState
+            icon={ShoppingCart}
+            title="Kategori Bulunmuyor"
+            description="Yakında yeni kategoriler eklenecek"
+            illustration="category"
+          />
         )}
       </div>
     </div>
