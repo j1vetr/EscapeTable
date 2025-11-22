@@ -37,9 +37,8 @@ export default function Home() {
   return (
     <div className="pb-20">
       {/* Campaigns / Special Offers Section */}
-      {!isAuthenticated && (
-        <SnowZone variant="primary">
-          <section className="bg-primary py-8 md:py-12">
+      <SnowZone variant="primary">
+        <section className="bg-primary py-8 md:py-12">
             <div className="container mx-auto px-4">
               <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                 {/* Main Campaign Card */}
@@ -184,7 +183,6 @@ export default function Home() {
             </div>
           </section>
         </SnowZone>
-      )}
 
       {/* Categories Carousel */}
       <SnowZone variant="surface">
