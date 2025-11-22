@@ -67,38 +67,12 @@ export default function Home() {
               </div>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading text-primary-foreground drop-shadow-lg">
-                Kamp İhtiyaçlarınız İçin<br />Premium Kurye Hizmeti
+                Premium Kurye Hizmeti
               </h1>
               
               <p className="text-lg md:text-xl text-primary-foreground/95 max-w-2xl mx-auto drop-shadow-md">
-                Karavan parklarında unuttuğunuz ya da acil ihtiyacınız olan premium ürünleri hızlıca kapınıza getiriyoruz.
+                Kamp alanlarına hızlı teslimat
               </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
-                <Button
-                  size="lg"
-                  asChild
-                  className="bg-primary-foreground hover:bg-primary-foreground/90 text-primary border-2 border-primary-foreground shadow-xl backdrop-blur-sm font-semibold"
-                  data-testid="button-hero-login"
-                >
-                  <Link to="/login">
-                    <LogIn className="w-5 h-5 mr-2" />
-                    Giriş Yap ve Alışverişe Başla
-                  </Link>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => {
-                    document.querySelector('.categories-section')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="bg-primary-foreground/10 hover:bg-primary-foreground/20 backdrop-blur-sm border-2 border-primary-foreground/30 text-primary-foreground font-semibold shadow-lg"
-                  data-testid="button-browse-products"
-                >
-                  Ürünleri İncele
-                  <ChevronRight className="w-5 h-5 ml-1" />
-                </Button>
-              </div>
             </div>
           </div>
         </section>
