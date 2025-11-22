@@ -6,6 +6,12 @@ EscapeTable is a specialized e-commerce platform designed to deliver premium foo
 
 ## Recent Changes
 
+**November 22, 2025 - Delivery Time Slot Redesign:**
+- **Horizontal Chip Carousel**: Redesigned time slot selection with modern pill-shaped chips in horizontal scrollable layout inspired by Getir/Trendyol patterns. Replaces vertical radio list with touch-friendly carousel.
+- **Native Radio Accessibility**: Uses native HTML radio inputs with `peer sr-only` pattern to ensure keyboard focus rings are visible on chip labels. Maintains proper radiogroup ARIA semantics for screen readers.
+- **Selected Slot Detail Card**: Added detail card below carousel showing selected slot with CheckCircle icon, delivery day, and estimated arrival time. Uses primary color accents for visual feedback.
+- **Responsive Scrolling**: Horizontal scroll container with `scrollbar-hide` on mobile, full chip visibility on desktop. Maintains hover-elevate and active-elevate-2 interactions.
+
 **November 22, 2025 - Campaign Cards Redesign:**
 - **Free Shipping Progress Card**: Replaced static free shipping card with dynamic progress bar tracking toward 2500 TL goal. Shows real-time cart total, remaining amount, and completion percentage with smooth animations. Includes "1 Saat" time limit badge and shimmer effect when goal is reached.
 - **Removed Fast Delivery Card**: Eliminated "Hızlı Teslimat" secondary card per user request, expanding free shipping card to full width.
