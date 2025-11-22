@@ -123,8 +123,9 @@ export default function Home() {
                         </div>
                         
                         {freeShippingProgress >= 100 ? (
-                          <p className="text-white/90 text-sm md:text-base">
-                            🎉 Tebrikler! Ücretsiz kargo kazandınız
+                          <p className="text-white/90 text-sm md:text-base flex items-center gap-2">
+                            <Sparkles className="w-4 h-4" />
+                            Tebrikler! Ücretsiz kargo kazandınız
                           </p>
                         ) : (
                           <p className="text-white/90 text-sm md:text-base">
