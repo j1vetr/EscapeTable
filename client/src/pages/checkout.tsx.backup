@@ -286,9 +286,9 @@ export default function Checkout() {
         </p>
       </div>
 
-      <div className="px-4 py-6 lg:grid lg:grid-cols-[minmax(0,1fr)_384px] gap-6 items-start">
+      <div className="px-4 py-6 flex gap-6">
         {/* Left: Checkout Steps */}
-        <div className="space-y-4">
+        <div className="flex-1 space-y-4">
         {/* Progress Indicators */}
         <div className="flex items-center justify-between mb-6">
           {[1, 2, 3].map((num) => (
@@ -502,6 +502,29 @@ export default function Checkout() {
               </RadioGroup>
             </Card>
 
+            {/* Order Summary */}
+            <Card className="p-6 border-2">
+              <h3 className="font-semibold mb-4">Sipariş Özeti</h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Ara Toplam</span>
+                  <span>{formatPrice(totalInCents)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Teslimat</span>
+                  <Badge variant="secondary">Ücretsiz</Badge>
+                </div>
+                <div className="border-t pt-2 mt-2">
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold">Toplam</span>
+                    <span className="text-xl font-bold text-primary" data-testid="text-order-total">
+                      {formatPrice(totalInCents)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Card>
+
             <div className="flex gap-3">
               <Button variant="outline" onClick={handlePrevStep} data-testid="button-prev-step3">
                 Geri
@@ -517,17 +540,6 @@ export default function Checkout() {
             </div>
           </div>
         )}
-        </div>
-
-        {/* Right: Sticky Order Summary (hidden on mobile, sticky on desktop) */}
-        <div className="hidden lg:block">
-          <OrderSummaryCard isSticky={true} />
-        </div>
-      </div>
-
-      {/* Mobile-only Order Summary (shown at bottom on mobile) */}
-      <div className="lg:hidden px-4 pb-6">
-        <OrderSummaryCard />
       </div>
     </div>
   );

@@ -4,10 +4,11 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useCartContext } from "@/context/CartContext";
 import { formatPrice } from "@/lib/authUtils";
-import { ShoppingCart, ArrowLeft, Minus, Plus } from "lucide-react";
+import { ShoppingCart, ArrowLeft, Minus, Plus, ZoomIn, X } from "lucide-react";
 import { useState } from "react";
 import type { Product } from "@shared/schema";
 
@@ -16,6 +17,7 @@ export default function ProductDetail() {
   const [, setLocation] = useLocation();
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
+  const [isImageZoomed, setIsImageZoomed] = useState(false);
   const { addToCart } = useCartContext();
   const { toast } = useToast();
   const productId = params?.id;
@@ -81,17 +83,60 @@ export default function ProductDetail() {
       </div>
 
       {/* Product Image */}
-      <div className="aspect-square bg-card flex items-center justify-center">
+      <div className="relative aspect-square bg-card flex items-center justify-center group cursor-pointer"
+        onClick={() => product.imageUrl && setIsImageZoomed(true)}
+        data-testid="image-product-main"
+      >
         {product.imageUrl ? (
-          <img
-            src={product.imageUrl}
-            alt={product.name}
-            className="w-full h-full object-cover"
-          />
+          <>
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              className="w-full h-full object-cover"
+            />
+            {/* Zoom Indicator */}
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
+              <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 rounded-full p-3">
+                <ZoomIn className="w-8 h-8 text-white" />
+              </div>
+            </div>
+            <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+              Büyütmek için tıklayın
+            </div>
+          </>
         ) : (
           <ShoppingCart className="w-24 h-24 text-muted-foreground" />
         )}
       </div>
+
+      {/* Image Zoom Modal */}
+      <Dialog open={isImageZoomed} onOpenChange={setIsImageZoomed}>
+        <DialogContent className="max-w-4xl w-full p-0 bg-black/95 border-0">
+          <div className="relative">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-2 right-2 z-10 text-white hover:bg-white/20 rounded-full"
+              onClick={() => setIsImageZoomed(false)}
+              data-testid="button-close-zoom"
+            >
+              <X className="w-6 h-6" />
+            </Button>
+            {product.imageUrl && (
+              <img
+                src={product.imageUrl}
+                alt={product.name}
+                className="w-full h-auto max-h-[90vh] object-contain"
+                data-testid="image-zoomed"
+              />
+            )}
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+              <h3 className="text-white font-semibold text-lg">{product.name}</h3>
+              <p className="text-white/80 text-sm">{formatPrice(product.priceInCents)}</p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Product Info */}
       <div className="px-4 py-6 space-y-4">

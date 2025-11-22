@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatPrice } from "@/lib/authUtils";
-import { ShoppingCart, ChevronRight, LogIn, Sparkles } from "lucide-react";
+import { ShoppingCart, ChevronRight, LogIn, Sparkles, AlertCircle } from "lucide-react";
 import { useLocation, Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import type { Category, Product } from "@shared/schema";
@@ -95,30 +95,49 @@ export default function Home() {
             </div>
           ) : (
             <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-              {activeCategories.map((category) => (
-                <Card
-                  key={category.id}
-                  className="group relative min-w-[120px] max-w-[120px] h-[120px] overflow-hidden cursor-pointer border-2 border-primary transition-all duration-300 hover:shadow-lg"
-                  onClick={() => setLocation(`/categories/${category.id}`)}
-                  data-testid={`category-card-${category.id}`}
-                >
-                  {category.imageUrl && (
-                    <div className="absolute inset-0">
-                      <img
-                        src={category.imageUrl}
-                        alt={category.name}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-primary/60"></div>
+              {activeCategories.map((category) => {
+                const isEmergency = category.name.toLowerCase().includes("acil");
+                return (
+                  <Card
+                    key={category.id}
+                    className={`group relative min-w-[120px] max-w-[120px] h-[120px] overflow-hidden cursor-pointer border-2 transition-all duration-300 hover:shadow-lg ${
+                      isEmergency 
+                        ? "border-red-600 dark:border-red-400 shadow-md shadow-red-500/40" 
+                        : "border-primary"
+                    }`}
+                    onClick={() => setLocation(`/categories/${category.id}`)}
+                    data-testid={`category-card-${category.id}`}
+                  >
+                    {category.imageUrl && (
+                      <div className="absolute inset-0">
+                        <img
+                          src={category.imageUrl}
+                          alt={category.name}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className={`absolute inset-0 ${isEmergency ? "bg-red-700/75 dark:bg-red-700/70" : "bg-primary/60"}`}></div>
+                      </div>
+                    )}
+                    {isEmergency && (
+                      <div className="absolute top-2 left-2">
+                        <Badge variant="destructive" className="text-[9px] px-1.5 py-0.5 font-bold shadow-sm">
+                          ACİL!
+                        </Badge>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 flex items-center justify-center p-2 pt-8">
+                      <p className="text-sm font-bold text-white text-center line-clamp-2 drop-shadow-md">
+                        {category.name}
+                      </p>
                     </div>
-                  )}
-                  <div className="absolute inset-0 flex items-center justify-center p-2">
-                    <p className="text-sm font-bold text-white text-center line-clamp-2">
-                      {category.name}
-                    </p>
-                  </div>
-                </Card>
-              ))}
+                    {isEmergency && (
+                      <div className="absolute bottom-2 right-2 bg-red-600 dark:bg-red-500 rounded-full p-1">
+                        <AlertCircle className="w-3.5 h-3.5 text-white" />
+                      </div>
+                    )}
+                  </Card>
+                );
+              })}
             </div>
           )}
         </div>

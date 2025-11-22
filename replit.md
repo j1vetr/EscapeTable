@@ -4,6 +4,13 @@
 
 EscapeTable is a specialized e-commerce platform designed to deliver premium food and beverage products to camping, caravan, and glamping customers. The platform focuses on rapid delivery of forgotten or urgently needed items to camping locations across Turkish coastal regions (Fethiye, Datça, Kaş). Built with a mobile-first approach inspired by Trendyol's UX patterns, it features a sophisticated delivery slot system, regional coverage management, and role-based access for customers, personnel, and administrators.
 
+## Recent Changes
+
+**November 22, 2025 - Critical UX Fixes:**
+- **Checkout Layout**: Restructured grid layout to `lg:grid-cols-[minmax(0,1fr)_384px]` with proper sticky behavior for order summary on desktop. Mobile shows summary at bottom, desktop shows sticky sidebar. Eliminated duplicate summary rendering.
+- **Category Filters**: Fixed price range slider to operate entirely in cents (step=100) with correct TL display via formatPrice. Ensures accurate filtering without unit conversion errors.
+- **Emergency Category Highlight**: Redesigned "Acil" category badge to be inline within card (top-left) instead of overlapping. Improved dark mode contrast with `dark:border-red-400` and proper spacing.
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
