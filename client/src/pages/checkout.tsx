@@ -426,7 +426,7 @@ export default function Checkout() {
               </div>
             </div>
 
-            {/* Time Slot Selection */}
+            {/* Time Slot Selection - Horizontal Chip Carousel */}
             <div>
               <Label className="mb-3 block font-medium">Teslimat Saati Aralığı</Label>
               {availableSlots.length === 0 ? (
@@ -436,21 +436,71 @@ export default function Checkout() {
                   <p className="text-sm mt-1">Lütfen yarın için sipariş verin.</p>
                 </div>
               ) : (
-                <RadioGroup value={selectedTimeSlot} onValueChange={handleTimeSlotSelect}>
-                  <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto">
-                    {availableSlots.map((slot) => (
-                      <div
-                        key={slot.id}
-                        className="flex items-center space-x-2 p-3 border-2 rounded-md hover-elevate"
-                      >
-                        <RadioGroupItem value={slot.id} id={slot.id} data-testid={`radio-timeslot-${slot.id}`} />
-                        <Label htmlFor={slot.id} className="cursor-pointer text-sm font-medium">
-                          {slot.label}
-                        </Label>
-                      </div>
-                    ))}
+                <div className="space-y-4" role="radiogroup" aria-label="Teslimat Saati Aralığı">
+                  {/* Horizontal Scrollable Time Chips */}
+                  <div className="relative">
+                    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                      {availableSlots.map((slot) => (
+                        <div key={slot.id} className="flex-shrink-0">
+                          <input
+                            type="radio"
+                            id={slot.id}
+                            name="delivery-time-slot"
+                            value={slot.id}
+                            checked={selectedTimeSlot === slot.id}
+                            onChange={() => handleTimeSlotSelect(slot.id)}
+                            className="peer sr-only"
+                            data-testid={`radio-timeslot-${slot.id}`}
+                          />
+                          <Label
+                            htmlFor={slot.id}
+                            className={`
+                              block px-4 py-3 rounded-full border-2 font-medium text-sm cursor-pointer
+                              transition-all duration-200 whitespace-nowrap
+                              peer-focus-visible:ring-2 peer-focus-visible:ring-primary peer-focus-visible:ring-offset-2
+                              ${selectedTimeSlot === slot.id 
+                                ? 'bg-primary text-primary-foreground border-primary shadow-md' 
+                                : 'bg-card border-border hover-elevate active-elevate-2'
+                              }
+                            `}
+                            data-testid={`button-timeslot-${slot.id}`}
+                          >
+                            <Clock className="w-4 h-4 inline mr-2" />
+                            {slot.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </RadioGroup>
+
+                  {/* Selected Slot Detail Card */}
+                  {selectedTimeSlot && availableSlots.find(s => s.id === selectedTimeSlot) && (
+                    <Card className="p-4 bg-primary/5 border-primary/20">
+                      <div className="flex items-start gap-3">
+                        <div className="bg-primary/10 p-2 rounded-lg">
+                          <CheckCircle className="w-5 h-5 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="font-semibold text-base">
+                              {availableSlots.find(s => s.id === selectedTimeSlot)?.label}
+                            </span>
+                            <Badge variant="outline" className="text-xs bg-primary/10 border-primary/30">
+                              Seçildi
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-muted-foreground flex items-center gap-1.5">
+                            <Calendar className="w-3.5 h-3.5" />
+                            {selectedDay === "today" ? "Bugün" : "Yarın"} teslimat edilecek
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Tahmini varış: {availableSlots.find(s => s.id === selectedTimeSlot)?.startTime.split(':')[0]}:30 civarı
+                          </p>
+                        </div>
+                      </div>
+                    </Card>
+                  )}
+                </div>
               )}
             </div>
 
