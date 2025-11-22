@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatPrice } from "@/lib/authUtils";
-import { ShoppingCart, ChevronRight, LogIn, Sparkles, AlertCircle, Search } from "lucide-react";
+import { ShoppingCart, ChevronRight, Sparkles, AlertCircle, Zap, Clock, Flame, Search } from "lucide-react";
 import { useLocation, Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { useCartContext } from "@/context/CartContext";
@@ -30,52 +30,120 @@ export default function Home() {
 
   return (
     <div className="pb-20">
-      {/* Video Hero Section */}
+      {/* Campaigns / Special Offers Section */}
       {!isAuthenticated && (
         <SnowZone variant="primary">
-        <section className="relative h-[400px] md:h-[500px] overflow-hidden">
-          {/* Video Background - Desktop only for performance */}
-          <div className="absolute inset-0">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-              className="hidden md:block w-full h-full object-cover"
-              poster="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?w=1200&h=600&fit=crop"
-            >
-              <source src="https://videos.pexels.com/video-files/4827/4827-hd_1920_1080_30fps.mp4" type="video/mp4" />
-            </video>
-            {/* Poster image fallback for mobile */}
-            <div 
-              className="md:hidden w-full h-full bg-cover bg-center"
-              style={{
-                backgroundImage: 'url(https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?w=1200&h=600&fit=crop)'
-              }}
-            />
-            {/* Dark overlay for better text visibility */}
-            <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/70 to-primary/90"></div>
-          </div>
+          <section className="bg-primary py-8 md:py-12">
+            <div className="container mx-auto px-4">
+              <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+                {/* Main Campaign Card */}
+                <Card className="relative overflow-visible bg-gradient-to-br from-red-600 to-red-700 dark:from-red-700 dark:to-red-800 border-0 hover-elevate active-elevate-2 transition-shadow duration-300" data-testid="card-campaign-main">
+                  <div className="p-6 md:p-8">
+                    <div className="flex items-start justify-between mb-4">
+                      <Badge className="bg-white text-red-700 hover:bg-white font-bold text-xs px-3 py-1">
+                        <Flame className="w-3 h-3 mr-1" />
+                        ÖZEL KAMPANYA
+                      </Badge>
+                      <div className="bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
+                        <p className="text-white text-xs font-medium flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          Sınırlı Süre
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-5xl md:text-6xl font-black text-white">%20</span>
+                        <span className="text-2xl md:text-3xl font-bold text-white/90">İNDİRİM</span>
+                      </div>
+                      
+                      <h3 className="text-xl md:text-2xl font-bold text-white">
+                        İlk Siparişinize Özel!
+                      </h3>
+                      
+                      <p className="text-white/90 text-sm md:text-base">
+                        Kamp alanınıza ilk teslimatınızda 200 TL ve üzeri alışverişlerde geçerli
+                      </p>
+                      
+                      <Button
+                        onClick={() => setLocation("/categories")}
+                        size="lg"
+                        className="bg-white text-red-700 hover:bg-white/90 font-bold mt-4 w-full md:w-auto"
+                        data-testid="button-campaign-shop"
+                      >
+                        <ShoppingCart className="w-5 h-5 mr-2" />
+                        Alışverişe Başla
+                        <ChevronRight className="w-5 h-5 ml-1" />
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  {/* Decorative elements */}
+                  <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                  <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                </Card>
 
-          {/* Content */}
-          <div className="relative h-full flex items-center justify-center px-4 py-12">
-            <div className="max-w-3xl mx-auto text-center space-y-6">
-              <div className="inline-flex items-center gap-2 bg-primary-foreground/15 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium text-primary-foreground border border-primary-foreground/20">
-                <Sparkles className="w-4 h-4" />
-                <span>EscapeTable Premium</span>
+                {/* Secondary Campaign Cards */}
+                <div className="grid grid-rows-2 gap-4">
+                  {/* Fast Delivery Card */}
+                  <Card className="relative overflow-visible bg-gradient-to-br from-primary to-primary/90 border-2 border-primary-foreground/20 hover-elevate active-elevate-2 transition-shadow duration-300" data-testid="card-campaign-delivery">
+                    <div className="p-4 md:p-6">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="bg-primary-foreground/20 p-2 rounded-lg">
+                              <Zap className="w-5 h-5 text-primary-foreground" />
+                            </div>
+                            <Badge variant="outline" className="bg-primary-foreground/10 text-primary-foreground border-primary-foreground/30">
+                              YENİ
+                            </Badge>
+                          </div>
+                          <h4 className="text-lg md:text-xl font-bold text-primary-foreground mb-1">
+                            Hızlı Teslimat
+                          </h4>
+                          <p className="text-primary-foreground/80 text-xs md:text-sm">
+                            30-60 dakika içinde kamp alanınızda
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-2xl md:text-3xl font-black text-primary-foreground">
+                            30dk
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Free Shipping Card */}
+                  <Card className="relative overflow-visible bg-gradient-to-br from-amber-600 to-amber-700 dark:from-amber-700 dark:to-amber-800 border-0 hover-elevate active-elevate-2 transition-shadow duration-300" data-testid="card-campaign-shipping">
+                    <div className="p-4 md:p-6">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <Badge className="bg-white text-amber-700 hover:bg-white font-bold text-xs px-2 py-1 mb-2">
+                            <Sparkles className="w-3 h-3 mr-1" />
+                            AVANTAJ
+                          </Badge>
+                          <h4 className="text-lg md:text-xl font-bold text-white mb-1">
+                            Ücretsiz Teslimat
+                          </h4>
+                          <p className="text-white/80 text-xs md:text-sm">
+                            150 TL ve üzeri siparişlerde
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xl md:text-2xl font-black text-white">
+                            0₺
+                          </p>
+                          <p className="text-xs text-white/70 line-through">49₺</p>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                </div>
               </div>
-              
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading text-primary-foreground drop-shadow-lg">
-                Premium Kurye Hizmeti
-              </h1>
-              
-              <p className="text-lg md:text-xl text-primary-foreground/95 max-w-2xl mx-auto drop-shadow-md">
-                Kamp alanlarına hızlı teslimat
-              </p>
             </div>
-          </div>
-        </section>
+          </section>
         </SnowZone>
       )}
 
