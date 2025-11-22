@@ -4,6 +4,7 @@ interface Snowflake {
   id: number;
   left: number;
   animationDuration: number;
+  animationDelay: number;
   opacity: number;
   size: number;
 }
@@ -27,6 +28,7 @@ export default function SnowZone({ children, variant, className = "" }: SnowZone
         id: i,
         left: Math.random() * 100,
         animationDuration: 15 + Math.random() * 15, // 15-30 seconds
+        animationDelay: Math.random() * 5, // 0-5 seconds delay
         opacity: 0.25 + Math.random() * 0.35, // 0.25-0.6 opacity
         size: 6 + Math.random() * 6, // 6-12px size
       });
@@ -50,7 +52,7 @@ export default function SnowZone({ children, variant, className = "" }: SnowZone
             style={{
               left: `${flake.left}%`,
               animationDuration: `${flake.animationDuration}s`,
-              animationDelay: `${Math.random() * 5}s`,
+              animationDelay: `${flake.animationDelay}s`,
               opacity: flake.opacity,
             }}
           >
