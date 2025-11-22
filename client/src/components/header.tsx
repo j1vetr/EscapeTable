@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { useTypingPlaceholder } from "@/hooks/useTypingPlaceholder";
 import { formatPrice } from "@/lib/authUtils";
 import logoUrl from "@assets/Escape-Table-Logo---Koyu_1763093921312.webp";
+import SnowZone from "@/components/snow-zone";
 
 export function Header() {
   const [, setLocation] = useLocation();
@@ -107,7 +108,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 bg-card border-b border-card-border">
       {/* Top Bar */}
-      <div className="bg-primary text-primary-foreground">
+      <SnowZone variant="primary" className="bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 py-2 flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm">
             <MapPin className="w-4 h-4" />
@@ -200,74 +201,76 @@ export function Header() {
             </div>
           </div>
         </div>
-      </div>
+      </SnowZone>
 
       {/* Main Header */}
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex flex-col items-center gap-4">
-          {/* Logo - Centered and Larger */}
-          <button
-            onClick={() => setLocation("/")}
-            className="flex-shrink-0"
-            data-testid="button-logo"
-          >
-            <img 
-              src={logoUrl} 
-              alt="EscapeTable" 
-              className="h-12 md:h-16 w-auto"
-            />
-          </button>
-
-          {/* Search Bar */}
-          <div className="w-full max-w-2xl" ref={searchRef}>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={placeholder}
-                className="w-full pl-10 pr-4 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                data-testid="input-search"
+      <SnowZone variant="surface" className="py-4">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col items-center gap-4">
+            {/* Logo - Centered and Larger */}
+            <button
+              onClick={() => setLocation("/")}
+              className="flex-shrink-0"
+              data-testid="button-logo"
+            >
+              <img 
+                src={logoUrl} 
+                alt="EscapeTable" 
+                className="h-12 md:h-16 w-auto"
               />
-              
-              {/* Search Results Dropdown */}
-              {showSearchResults && searchResults && searchResults.length > 0 && (
-                <Card className="absolute top-full mt-2 w-full max-h-96 overflow-y-auto shadow-lg z-50">
-                  <div className="divide-y">
-                    {searchResults.map((product) => (
-                      <button
-                        key={product.id}
-                        onClick={() => handleProductClick(product.id)}
-                        className="w-full p-3 flex items-center gap-3 hover-elevate active-elevate-2 text-left"
-                        data-testid={`search-result-${product.id}`}
-                      >
-                        <div className="w-16 h-16 flex-shrink-0 bg-muted rounded overflow-hidden">
-                          {product.imageUrl ? (
-                            <img
-                              src={product.imageUrl}
-                              alt={product.name}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full bg-muted" />
-                          )}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-medium text-sm truncate">{product.name}</h4>
-                          <p className="text-lg font-bold text-primary mt-1">
-                            {formatPrice(product.priceInCents)}
-                          </p>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </Card>
-              )}
+            </button>
+
+            {/* Search Bar */}
+            <div className="w-full max-w-2xl" ref={searchRef}>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={placeholder}
+                  className="w-full pl-10 pr-4 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  data-testid="input-search"
+                />
+                
+                {/* Search Results Dropdown */}
+                {showSearchResults && searchResults && searchResults.length > 0 && (
+                  <Card className="absolute top-full mt-2 w-full max-h-96 overflow-y-auto shadow-lg z-50">
+                    <div className="divide-y">
+                      {searchResults.map((product) => (
+                        <button
+                          key={product.id}
+                          onClick={() => handleProductClick(product.id)}
+                          className="w-full p-3 flex items-center gap-3 hover-elevate active-elevate-2 text-left"
+                          data-testid={`search-result-${product.id}`}
+                        >
+                          <div className="w-16 h-16 flex-shrink-0 bg-muted rounded overflow-hidden">
+                            {product.imageUrl ? (
+                              <img
+                                src={product.imageUrl}
+                                alt={product.name}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-muted" />
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-sm truncate">{product.name}</h4>
+                            <p className="text-lg font-bold text-primary mt-1">
+                              {formatPrice(product.priceInCents)}
+                            </p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </Card>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </SnowZone>
     </header>
   );
 }

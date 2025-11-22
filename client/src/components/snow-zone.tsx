@@ -57,19 +57,33 @@ export default function SnowZone({ children, variant, className = "" }: SnowZone
             <svg
               width={flake.size}
               height={flake.size}
-              viewBox="0 0 24 24"
+              viewBox="0 0 32 32"
               style={{ 
                 pointerEvents: 'none',
                 color: snowflakeColor
               }}
+              fill="currentColor"
             >
-              <path
-                d="M12 2L12 22M12 2L8 6M12 2L16 6M12 22L8 18M12 22L16 18M2 12L22 12M2 12L6 8M2 12L6 16M22 12L18 8M22 12L18 16M6.34 6.34L17.66 17.66M6.34 6.34L10.34 6.34M6.34 6.34L6.34 10.34M17.66 17.66L13.66 17.66M17.66 17.66L17.66 13.66M6.34 17.66L17.66 6.34M6.34 17.66L6.34 13.66M6.34 17.66L10.34 17.66M17.66 6.34L17.66 10.34M17.66 6.34L13.66 6.34"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                fill="none"
-              />
+              {/* Classic 6-pointed snowflake */}
+              <circle cx="16" cy="16" r="1.5" />
+              
+              {/* 6 main branches */}
+              <rect x="15" y="4" width="2" height="10" rx="1" />
+              <rect x="15" y="18" width="2" height="10" rx="1" />
+              <rect x="4" y="15" width="10" height="2" ry="1" />
+              <rect x="18" y="15" width="10" height="2" ry="1" />
+              <rect x="9" y="9" width="2" height="8" rx="1" transform="rotate(45 10 13)" />
+              <rect x="21" y="9" width="2" height="8" rx="1" transform="rotate(-45 22 13)" />
+              
+              {/* Small decorative tips */}
+              <circle cx="16" cy="6" r="1" />
+              <circle cx="16" cy="26" r="1" />
+              <circle cx="6" cy="16" r="1" />
+              <circle cx="26" cy="16" r="1" />
+              <circle cx="10" cy="10" r="1" />
+              <circle cx="22" cy="10" r="1" />
+              <circle cx="10" cy="22" r="1" />
+              <circle cx="22" cy="22" r="1" />
             </svg>
           </div>
         ))}
