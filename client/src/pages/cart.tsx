@@ -56,7 +56,7 @@ export default function Cart() {
   }
 
   return (
-    <div className="pb-32">
+    <div className="pb-48">
       <div className="bg-primary text-primary-foreground px-4 py-6">
         <h1 className="text-2xl font-bold font-heading">Sepetim</h1>
         <p className="text-sm text-primary-foreground/80 mt-1">

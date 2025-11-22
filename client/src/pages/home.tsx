@@ -4,15 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatPrice } from "@/lib/authUtils";
-import { ShoppingCart, ChevronRight, LogIn, Sparkles, AlertCircle } from "lucide-react";
+import { ShoppingCart, ChevronRight, LogIn, Sparkles, AlertCircle, Search } from "lucide-react";
 import { useLocation, Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
+import { useCartContext } from "@/context/CartContext";
 import type { Category, Product } from "@shared/schema";
 import EmptyState from "@/components/empty-state";
+import SnowZone from "@/components/snow-zone";
 
 export default function Home() {
   const [, setLocation] = useLocation();
   const { isAuthenticated } = useAuth();
+  const { addToCart } = useCartContext();
 
   const { data: categories, isLoading: categoriesLoading } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
@@ -27,26 +30,55 @@ export default function Home() {
 
   return (
     <div className="pb-20">
-      {/* Welcome Hero for Unauthenticated Users */}
+      {/* Video Hero Section */}
       {!isAuthenticated && (
-        <section className="bg-gradient-to-br from-primary via-primary to-primary/90 text-primary-foreground">
-          <div className="px-4 py-12">
-            <div className="max-w-2xl mx-auto text-center space-y-4">
-              <div className="inline-flex items-center gap-2 bg-primary-foreground/10 px-4 py-2 rounded-full text-sm font-medium">
+        <SnowZone variant="primary">
+        <section className="relative h-[400px] md:h-[500px] overflow-hidden">
+          {/* Video Background - Desktop only for performance */}
+          <div className="absolute inset-0">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              className="hidden md:block w-full h-full object-cover"
+              poster="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&h=600&fit=crop"
+            >
+              <source src="https://assets.mixkit.co/videos/preview/mixkit-camping-tent-in-the-forest-4373-large.mp4" type="video/mp4" />
+            </video>
+            {/* Poster image fallback for mobile */}
+            <div 
+              className="md:hidden w-full h-full bg-cover bg-center"
+              style={{
+                backgroundImage: 'url(https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&h=600&fit=crop)'
+              }}
+            />
+            {/* Dark overlay for better text visibility */}
+            <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/70 to-primary/90"></div>
+          </div>
+
+          {/* Content */}
+          <div className="relative h-full flex items-center justify-center px-4 py-12">
+            <div className="max-w-3xl mx-auto text-center space-y-6">
+              <div className="inline-flex items-center gap-2 bg-primary-foreground/15 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium text-primary-foreground border border-primary-foreground/20">
                 <Sparkles className="w-4 h-4" />
-                <span>Premium Kamp Deneyimi</span>
+                <span>EscapeTable Premium</span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold font-heading">
-                Kamp Keyfinizi Eksiksiz Yaşayın
+              
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading text-primary-foreground drop-shadow-lg">
+                Kamp İhtiyaçlarınız İçin<br />Premium Kurye Hizmeti
               </h1>
-              <p className="text-lg text-primary-foreground/90">
-                Karavan parklarında unuttuğunuz ya da ihtiyacınız olan premium ürünleri size hızlıca ulaştırıyoruz.
+              
+              <p className="text-lg md:text-xl text-primary-foreground/95 max-w-2xl mx-auto drop-shadow-md">
+                Karavan parklarında unuttuğunuz ya da acil ihtiyacınız olan premium ürünleri hızlıca kapınıza getiriyoruz.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
                 <Button
                   size="lg"
                   asChild
-                  className="bg-card hover:bg-card text-primary border-2 border-primary-foreground/20 shadow-lg"
+                  className="bg-primary-foreground hover:bg-primary-foreground/90 text-primary border-2 border-primary-foreground shadow-xl backdrop-blur-sm font-semibold"
                   data-testid="button-hero-login"
                 >
                   <Link to="/login">
@@ -60,18 +92,21 @@ export default function Home() {
                   onClick={() => {
                     document.querySelector('.categories-section')?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="bg-primary-foreground/10 hover:bg-primary-foreground/20 border-primary-foreground/20 text-primary-foreground"
+                  className="bg-primary-foreground/10 hover:bg-primary-foreground/20 backdrop-blur-sm border-2 border-primary-foreground/30 text-primary-foreground font-semibold shadow-lg"
                   data-testid="button-browse-products"
                 >
                   Ürünleri İncele
+                  <ChevronRight className="w-5 h-5 ml-1" />
                 </Button>
               </div>
             </div>
           </div>
         </section>
+        </SnowZone>
       )}
 
       {/* Categories Carousel */}
+      <SnowZone variant="surface">
       <section className="py-6 bg-card categories-section">
         <div className="px-4">
           <div className="flex items-center justify-between mb-4">
@@ -142,8 +177,10 @@ export default function Home() {
           )}
         </div>
       </section>
+      </SnowZone>
 
       {/* Featured Products */}
+      <SnowZone variant="surface">
       <section className="py-6">
         <div className="px-4">
           <h2 className="text-xl font-semibold mb-4 font-heading">Öne Çıkanlar</h2>
@@ -194,16 +231,33 @@ export default function Home() {
                         {formatPrice(product.priceInCents)}
                       </span>
                     </div>
-                    <Button
-                      size="sm"
-                      className="w-full bg-primary hover:bg-primary/90 text-white font-semibold text-xs h-8"
-                      disabled={product.stock === 0}
-                      data-testid={`button-add-to-cart-${product.id}`}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
-                      Sepete Ekle
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        className="flex-1 bg-primary hover:bg-primary/90 text-white font-semibold text-xs h-8"
+                        disabled={product.stock === 0}
+                        data-testid={`button-add-to-cart-${product.id}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addToCart(product, 1);
+                        }}
+                      >
+                        <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
+                        Sepete Ekle
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        className="h-8 w-8 flex-shrink-0"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setLocation(`/products/${product.id}`);
+                        }}
+                        data-testid={`button-view-product-${product.id}`}
+                      >
+                        <Search className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
                 </Card>
               ))}
@@ -218,6 +272,7 @@ export default function Home() {
           )}
         </div>
       </section>
+      </SnowZone>
     </div>
   );
 }

@@ -71,7 +71,7 @@ export default function ProductRecommendations({
         {title}
       </h2>
       <div className="px-4">
-        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+        <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
           {recommendations.map((product) => (
             <Card
               key={product.id}

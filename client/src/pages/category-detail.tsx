@@ -23,15 +23,17 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { formatPrice } from "@/lib/authUtils";
-import { ShoppingCart, ArrowLeft, SlidersHorizontal, X } from "lucide-react";
+import { ShoppingCart, ArrowLeft, SlidersHorizontal, X, Search } from "lucide-react";
 import type { Category, Product } from "@shared/schema";
 import { useState, useMemo, useEffect } from "react";
+import { useCartContext } from "@/context/CartContext";
 
 type SortOption = "price-asc" | "price-desc" | "name-asc" | "name-desc";
 
 export default function CategoryDetail() {
   const [, params] = useRoute("/categories/:id");
   const [, setLocation] = useLocation();
+  const { addToCart } = useCartContext();
   const categoryId = params?.id;
 
   // Filter states (prices in cents)
@@ -335,18 +337,33 @@ export default function CategoryDetail() {
                         {formatPrice(product.priceInCents)}
                       </span>
                     </div>
-                    <Button
-                      size="sm"
-                      className="w-full bg-primary hover:bg-primary/90 text-white font-semibold text-xs h-8"
-                      disabled={product.stock === 0}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                      data-testid={`button-add-to-cart-${product.id}`}
-                    >
-                      <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
-                      Sepete Ekle
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        className="flex-1 bg-primary hover:bg-primary/90 text-white font-semibold text-xs h-8"
+                        disabled={product.stock === 0}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addToCart(product, 1);
+                        }}
+                        data-testid={`button-add-to-cart-${product.id}`}
+                      >
+                        <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
+                        Sepete Ekle
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        className="h-8 w-8 flex-shrink-0"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setLocation(`/products/${product.id}`);
+                        }}
+                        data-testid={`button-view-product-${product.id}`}
+                      >
+                        <Search className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
                 </Card>
               ))}

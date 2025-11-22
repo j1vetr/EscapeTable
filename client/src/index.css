@@ -361,4 +361,18 @@
       transform: scale(1);
     }
   }
+
+  /* Snowfall animation */
+  @keyframes snowfall {
+    0% {
+      transform: translateY(-10vh) translateX(0);
+    }
+    100% {
+      transform: translateY(110vh) translateX(20px);
+    }
+  }
+
+  .animate-snowfall {
+    animation: snowfall linear infinite;
+  }
 }
