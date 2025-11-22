@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatPrice } from "@/lib/authUtils";
-import { ShoppingCart, ChevronRight, Sparkles, AlertCircle, Zap, Clock, Flame, Search } from "lucide-react";
+import { ShoppingCart, ChevronRight, Sparkles, AlertCircle, Clock, Flame, Search, TrendingUp, Package } from "lucide-react";
 import { useLocation, Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { useCartContext } from "@/context/CartContext";
@@ -15,7 +15,7 @@ import SnowZone from "@/components/snow-zone";
 export default function Home() {
   const [, setLocation] = useLocation();
   const { isAuthenticated } = useAuth();
-  const { addToCart } = useCartContext();
+  const { addToCart, totalInCents } = useCartContext();
 
   const { data: categories, isLoading: categoriesLoading } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
@@ -27,6 +27,12 @@ export default function Home() {
 
   const activeCategories = categories?.filter((c) => c.isActive) || [];
   const activeFeaturedProducts = featuredProducts?.filter((p) => p.isActive) || [];
+
+  // Free shipping goal calculation
+  const FREE_SHIPPING_GOAL = 250000; // 2500 TL in cents
+  const cartTotal = totalInCents;
+  const remainingForFreeShipping = Math.max(0, FREE_SHIPPING_GOAL - cartTotal);
+  const freeShippingProgress = Math.min(100, (cartTotal / FREE_SHIPPING_GOAL) * 100);
 
   return (
     <div className="pb-20">
@@ -84,63 +90,95 @@ export default function Home() {
                   <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
                 </Card>
 
-                {/* Secondary Campaign Cards */}
-                <div className="grid grid-rows-2 gap-4">
-                  {/* Fast Delivery Card */}
-                  <Card className="relative overflow-visible bg-gradient-to-br from-primary to-primary/90 border-2 border-primary-foreground/20 hover-elevate active-elevate-2 transition-shadow duration-300" data-testid="card-campaign-delivery">
-                    <div className="p-4 md:p-6">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <div className="bg-primary-foreground/20 p-2 rounded-lg">
-                              <Zap className="w-5 h-5 text-primary-foreground" />
-                            </div>
-                            <Badge variant="outline" className="bg-primary-foreground/10 text-primary-foreground border-primary-foreground/30">
-                              YENİ
-                            </Badge>
+                {/* Free Shipping Progress Card */}
+                <Card className="relative overflow-visible bg-gradient-to-br from-emerald-600 to-emerald-700 dark:from-emerald-700 dark:to-emerald-800 border-0 hover-elevate active-elevate-2 transition-shadow duration-300" data-testid="card-campaign-shipping">
+                  <div className="p-6 md:p-8">
+                    <div className="flex items-start justify-between mb-4">
+                      <Badge className="bg-white text-emerald-700 hover:bg-white font-bold text-xs px-3 py-1">
+                        <Package className="w-3 h-3 mr-1" />
+                        KARGO HEDEFİ
+                      </Badge>
+                      {freeShippingProgress >= 100 ? (
+                        <Badge className="bg-white/20 backdrop-blur-sm text-white border-0 font-bold">
+                          <Sparkles className="w-3 h-3 mr-1" />
+                          Hedef Tamamlandı!
+                        </Badge>
+                      ) : (
+                        <div className="bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
+                          <p className="text-white text-xs font-medium flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            1 Saat
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="text-xl md:text-2xl font-bold text-white">
+                            Ücretsiz Kargo Kazanın!
+                          </h4>
+                          <TrendingUp className="w-6 h-6 text-white/80" />
+                        </div>
+                        
+                        {freeShippingProgress >= 100 ? (
+                          <p className="text-white/90 text-sm md:text-base">
+                            🎉 Tebrikler! Ücretsiz kargo kazandınız
+                          </p>
+                        ) : (
+                          <p className="text-white/90 text-sm md:text-base">
+                            {formatPrice(remainingForFreeShipping)} daha alışveriş yapın, kargo bedava!
+                          </p>
+                        )}
+                      </div>
+                      
+                      {/* Progress Bar */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between text-xs md:text-sm">
+                          <span className="text-white/80 font-medium">
+                            Sepet: {formatPrice(cartTotal)}
+                          </span>
+                          <span className="text-white font-bold">
+                            Hedef: {formatPrice(FREE_SHIPPING_GOAL)}
+                          </span>
+                        </div>
+                        
+                        <div className="relative h-3 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm">
+                          <div 
+                            className="absolute inset-y-0 left-0 bg-white rounded-full transition-all duration-500 ease-out"
+                            style={{ width: `${freeShippingProgress}%` }}
+                          >
+                            {freeShippingProgress >= 100 && (
+                              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/40 to-white/0 animate-shimmer" />
+                            )}
                           </div>
-                          <h4 className="text-lg md:text-xl font-bold text-primary-foreground mb-1">
-                            Hızlı Teslimat
-                          </h4>
-                          <p className="text-primary-foreground/80 text-xs md:text-sm">
-                            30-60 dakika içinde kamp alanınızda
-                          </p>
                         </div>
-                        <div className="text-right">
-                          <p className="text-2xl md:text-3xl font-black text-primary-foreground">
-                            30dk
-                          </p>
+                        
+                        <div className="flex items-center justify-center">
+                          <span className="text-white text-xs md:text-sm font-bold bg-white/10 px-3 py-1 rounded-full backdrop-blur-sm">
+                            %{Math.round(freeShippingProgress)} Tamamlandı
+                          </span>
                         </div>
                       </div>
+                      
+                      <Button
+                        onClick={() => setLocation("/categories")}
+                        size="lg"
+                        className="bg-white text-emerald-700 hover:bg-white/90 font-bold w-full"
+                        data-testid="button-shipping-shop"
+                      >
+                        <ShoppingCart className="w-5 h-5 mr-2" />
+                        Alışverişe Devam Et
+                        <ChevronRight className="w-5 h-5 ml-1" />
+                      </Button>
                     </div>
-                  </Card>
-
-                  {/* Free Shipping Card */}
-                  <Card className="relative overflow-visible bg-gradient-to-br from-amber-600 to-amber-700 dark:from-amber-700 dark:to-amber-800 border-0 hover-elevate active-elevate-2 transition-shadow duration-300" data-testid="card-campaign-shipping">
-                    <div className="p-4 md:p-6">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <Badge className="bg-white text-amber-700 hover:bg-white font-bold text-xs px-2 py-1 mb-2">
-                            <Sparkles className="w-3 h-3 mr-1" />
-                            AVANTAJ
-                          </Badge>
-                          <h4 className="text-lg md:text-xl font-bold text-white mb-1">
-                            Ücretsiz Teslimat
-                          </h4>
-                          <p className="text-white/80 text-xs md:text-sm">
-                            150 TL ve üzeri siparişlerde
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-xl md:text-2xl font-black text-white">
-                            0₺
-                          </p>
-                          <p className="text-xs text-white/70 line-through">49₺</p>
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
-                </div>
+                  </div>
+                  
+                  {/* Decorative elements */}
+                  <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                  <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                </Card>
               </div>
             </div>
           </section>
