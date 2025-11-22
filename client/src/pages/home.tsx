@@ -41,17 +41,17 @@ export default function Home() {
               loop
               muted
               playsInline
-              preload="metadata"
+              preload="auto"
               className="hidden md:block w-full h-full object-cover"
-              poster="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&h=600&fit=crop"
+              poster="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?w=1200&h=600&fit=crop"
             >
-              <source src="https://assets.mixkit.co/videos/preview/mixkit-camping-tent-in-the-forest-4373-large.mp4" type="video/mp4" />
+              <source src="https://videos.pexels.com/video-files/4827/4827-hd_1920_1080_30fps.mp4" type="video/mp4" />
             </video>
             {/* Poster image fallback for mobile */}
             <div 
               className="md:hidden w-full h-full bg-cover bg-center"
               style={{
-                backgroundImage: 'url(https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&h=600&fit=crop)'
+                backgroundImage: 'url(https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?w=1200&h=600&fit=crop)'
               }}
             />
             {/* Dark overlay for better text visibility */}
