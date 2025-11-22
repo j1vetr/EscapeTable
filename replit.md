@@ -6,6 +6,11 @@ EscapeTable is a specialized e-commerce platform designed to deliver premium foo
 
 ## Recent Changes
 
+**November 22, 2025 - Campaign Cards Redesign:**
+- **Free Shipping Progress Card**: Replaced static free shipping card with dynamic progress bar tracking toward 2500 TL goal. Shows real-time cart total, remaining amount, and completion percentage with smooth animations. Includes "1 Saat" time limit badge and shimmer effect when goal is reached.
+- **Removed Fast Delivery Card**: Eliminated "Hızlı Teslimat" secondary card per user request, expanding free shipping card to full width.
+- **Cart Integration**: Progress card uses `totalInCents` from CartContext for accurate real-time tracking without extra calculations or re-renders.
+
 **November 22, 2025 - Critical UX Fixes:**
 - **Checkout Layout**: Restructured grid layout to `lg:grid-cols-[minmax(0,1fr)_384px]` with proper sticky behavior for order summary on desktop. Mobile shows summary at bottom, desktop shows sticky sidebar. Eliminated duplicate summary rendering.
 - **Category Filters**: Fixed price range slider to operate entirely in cents (step=100) with correct TL display via formatPrice. Ensures accurate filtering without unit conversion errors.
