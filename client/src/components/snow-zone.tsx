@@ -57,33 +57,56 @@ export default function SnowZone({ children, variant, className = "" }: SnowZone
             <svg
               width={flake.size}
               height={flake.size}
-              viewBox="0 0 32 32"
+              viewBox="0 0 100 100"
               style={{ 
                 pointerEvents: 'none',
                 color: snowflakeColor
               }}
-              fill="currentColor"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              {/* Classic 6-pointed snowflake */}
-              <circle cx="16" cy="16" r="1.5" />
+              {/* Detailed snowflake matching user's example */}
+              {/* Center hexagon */}
+              <path d="M 50 35 L 58 40 L 58 50 L 50 55 L 42 50 L 42 40 Z" fill="currentColor" />
               
-              {/* 6 main branches */}
-              <rect x="15" y="4" width="2" height="10" rx="1" />
-              <rect x="15" y="18" width="2" height="10" rx="1" />
-              <rect x="4" y="15" width="10" height="2" ry="1" />
-              <rect x="18" y="15" width="10" height="2" ry="1" />
-              <rect x="9" y="9" width="2" height="8" rx="1" transform="rotate(45 10 13)" />
-              <rect x="21" y="9" width="2" height="8" rx="1" transform="rotate(-45 22 13)" />
+              {/* Branch 1: Top (12 o'clock) */}
+              <line x1="50" y1="35" x2="50" y2="5" />
+              <line x1="50" y1="15" x2="42" y2="22" />
+              <line x1="50" y1="15" x2="58" y2="22" />
+              <circle cx="50" cy="5" r="2.5" fill="currentColor" />
               
-              {/* Small decorative tips */}
-              <circle cx="16" cy="6" r="1" />
-              <circle cx="16" cy="26" r="1" />
-              <circle cx="6" cy="16" r="1" />
-              <circle cx="26" cy="16" r="1" />
-              <circle cx="10" cy="10" r="1" />
-              <circle cx="22" cy="10" r="1" />
-              <circle cx="10" cy="22" r="1" />
-              <circle cx="22" cy="22" r="1" />
+              {/* Branch 2: Bottom (6 o'clock) */}
+              <line x1="50" y1="55" x2="50" y2="95" />
+              <line x1="50" y1="75" x2="42" y2="68" />
+              <line x1="50" y1="75" x2="58" y2="68" />
+              <circle cx="50" cy="95" r="2.5" fill="currentColor" />
+              
+              {/* Branch 3: Top-right (2 o'clock) */}
+              <line x1="58" y1="40" x2="82" y2="22" />
+              <line x1="70" y1="28" x2="66" y2="38" />
+              <line x1="70" y1="28" x2="78" y2="32" />
+              <circle cx="82" cy="22" r="2.5" fill="currentColor" />
+              
+              {/* Branch 4: Bottom-left (8 o'clock) */}
+              <line x1="42" y1="50" x2="18" y2="68" />
+              <line x1="30" y1="62" x2="34" y2="52" />
+              <line x1="30" y1="62" x2="22" y2="58" />
+              <circle cx="18" cy="68" r="2.5" fill="currentColor" />
+              
+              {/* Branch 5: Top-left (10 o'clock) */}
+              <line x1="42" y1="40" x2="18" y2="22" />
+              <line x1="30" y1="28" x2="22" y2="32" />
+              <line x1="30" y1="28" x2="34" y2="38" />
+              <circle cx="18" cy="22" r="2.5" fill="currentColor" />
+              
+              {/* Branch 6: Bottom-right (4 o'clock) */}
+              <line x1="58" y1="50" x2="82" y2="68" />
+              <line x1="70" y1="62" x2="78" y2="58" />
+              <line x1="70" y1="62" x2="66" y2="52" />
+              <circle cx="82" cy="68" r="2.5" fill="currentColor" />
             </svg>
           </div>
         ))}
