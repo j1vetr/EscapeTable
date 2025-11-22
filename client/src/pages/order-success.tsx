@@ -270,7 +270,7 @@ export default function OrderSuccess() {
 
         <div className="mt-8 p-4 bg-muted/30 rounded-lg text-center">
           <p className="text-sm text-muted-foreground">
-            Sorularınız için bizimle iletişime geçebilirsiniz. 🏕️
+            Sorularınız için bizimle iletişime geçebilirsiniz.
           </p>
         </div>
       </div>

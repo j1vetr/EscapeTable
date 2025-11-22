@@ -63,6 +63,7 @@ export function enhancedToast({
       <button
         onClick={action.onClick}
         className="text-xs font-medium underline hover:no-underline"
+        data-testid="toast-action-button"
       >
         {action.label}
       </button>
