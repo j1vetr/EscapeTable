@@ -6,6 +6,10 @@ EscapeTable is a specialized e-commerce platform designed to deliver premium foo
 
 ## Recent Changes
 
+**November 22, 2025 - Hero Section Visibility Fix:**
+- **Authenticated User Access**: Removed conditional rendering restriction - hero section (campaigns/special offers with SnowZone) now displays for all users regardless of authentication status
+- **Campaign Accessibility**: Both authenticated and unauthenticated users can now see special offers, free shipping progress, and promotional campaigns on home page
+
 **November 22, 2025 - Delivery Time Slot Redesign:**
 - **Horizontal Chip Carousel**: Redesigned time slot selection with modern pill-shaped chips in horizontal scrollable layout inspired by Getir/Trendyol patterns. Replaces vertical radio list with touch-friendly carousel.
 - **Native Radio Accessibility**: Uses native HTML radio inputs with `peer sr-only` pattern to ensure keyboard focus rings are visible on chip labels. Maintains proper radiogroup ARIA semantics for screen readers.
